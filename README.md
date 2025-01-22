@@ -2,8 +2,8 @@
 
 This is a temporary placeholder page.  We got hitchhiking.org.
 
-Now we should probably do something nice with it.  One idea is to set up a nostr based forum, in the spirit of [nostroots](https://github.com/Trustroots/nostroots).
-
+Now we should probably do something nice with it.  One idea is to set up a [nostr based forum](https://github.com/Hitchwiki/hitchhiking.org/issues), in the spirit of [nostroots](https://github.com/Trustroots/nostroots).
+Other ideas are [welcome](https://github.com/Hitchwiki/hitchhiking.org/issues/new).
 
 Some of our projects:
 
