@@ -7,11 +7,11 @@ Other ideas are [welcome](https://github.com/Hitchwiki/hitchhiking.org/issues/ne
 
 Some of our projects:
 
-* https://hitchwiki.org/
-* https://trashwiki.org/
-* https://trustroots.org/
+* [hitchwiki](https://hitchwiki.org/)
+* [trashwiki](https://trashwiki.org/)
+* [trustroots](https://trustroots.org/)
 
 We also have
 
-* https://rideshares.org/
-* https://randomroads.org/
+* [rideshares.org](https://rideshares.org/)
+* [randomroads.org](https://randomroads.org/)
