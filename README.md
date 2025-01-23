@@ -10,6 +10,7 @@ Some of our projects:
 * [hitchwiki](https://hitchwiki.org/)
 * [trashwiki](https://trashwiki.org/)
 * [trustroots](https://trustroots.org/)
+* [hitchmap](https://hitchmap.com/)
 
 We also have
 
