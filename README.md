@@ -7,12 +7,9 @@ Other ideas are [welcome](https://github.com/Hitchwiki/hitchhiking.org/issues/ne
 
 Some of our projects:
 
-* [hitchwiki](https://hitchwiki.org/)
-* [trashwiki](https://trashwiki.org/)
-* [trustroots](https://trustroots.org/)
+* [hitchwiki](https://hitchwiki.org/), since 2004/2006
+* [trashwiki](https://trashwiki.org/), since 2008
+* [trustroots](https://trustroots.org/), since 2014
 * [hitchmap](https://hitchmap.com/)
-
-We also have
-
-* [rideshares.org](https://rideshares.org/)
-* [randomroads.org](https://randomroads.org/)
+* [rideshares.org](https://rideshares.org/), nostr based rideshares application https://github.com/kenflannery/rideshares-nostr, since May 2025
+* [randomroads.org](https://randomroads.org/), a magazine about independent forms of traveling, not actively maintained since 2015 or so
