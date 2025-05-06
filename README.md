@@ -1,7 +1,5 @@
 # hitchhiking.org
 
-_This is a temporary placeholder page._
-
 Some of our projects:
 
 * [hitchwiki](https://hitchwiki.org/), since [2005 or so](https://hitchwiki.org/en/Hitchwiki:About#Background)
@@ -12,7 +10,7 @@ Some of our projects:
 * [randomroads.org](https://randomroads.org/), a magazine about independent forms of traveling, not actively maintained since 2015 or so
 
 
-We want to do something nice with the hitchhiking.org domain.  [Ideas](https://github.com/Hitchwiki/hitchhiking.org/issues):
+This is a temporary placeholder page.  We want to do something nice with the hitchhiking.org domain.  [Ideas](https://github.com/Hitchwiki/hitchhiking.org/issues):
 - set up a [nostr based forum](https://github.com/Hitchwiki/hitchhiking.org/issues), in the spirit of [nostroots](https://github.com/Trustroots/nostroots).
 - [restore digihitch](https://github.com/Hitchwiki/hitchhiking.org/issues/3)
 - [ai.hitchhiking.org](https://github.com/Hitchwiki/hitchhiking.org/issues/4)
