@@ -1,6 +1,6 @@
 # hitchhiking.org
 
-''This is a temporary placeholder page.''
+_This is a temporary placeholder page._
 
 Some of our projects:
 
