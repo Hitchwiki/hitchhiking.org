@@ -1,9 +1,6 @@
 # hitchhiking.org
 
-This is a temporary placeholder page.  We got hitchhiking.org.
-
-Now we should probably do something nice with this domain.  One idea is to set up a [nostr based forum](https://github.com/Hitchwiki/hitchhiking.org/issues), in the spirit of [nostroots](https://github.com/Trustroots/nostroots).
-Other ideas are [welcome](https://github.com/Hitchwiki/hitchhiking.org/issues/new).
+''This is a temporary placeholder page.''
 
 Some of our projects:
 
@@ -13,3 +10,8 @@ Some of our projects:
 * [hitchmap](https://hitchmap.com/)
 * [rideshares.org](https://rideshares.org/), nostr based rideshares application https://github.com/kenflannery/rideshares-nostr, since May 2025
 * [randomroads.org](https://randomroads.org/), a magazine about independent forms of traveling, not actively maintained since 2015 or so
+
+
+We want to do something nice with this domain.  One idea is to set up a [nostr based forum](https://github.com/Hitchwiki/hitchhiking.org/issues), in the spirit of [nostroots](https://github.com/Trustroots/nostroots).
+Other ideas are [welcome](https://github.com/Hitchwiki/hitchhiking.org/issues/new).
+
