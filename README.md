@@ -12,6 +12,6 @@ Some of our projects:
 * [randomroads.org](https://randomroads.org/), a magazine about independent forms of traveling, not actively maintained since 2015 or so
 
 
-We want to do something nice with this domain.  One idea is to set up a [nostr based forum](https://github.com/Hitchwiki/hitchhiking.org/issues), in the spirit of [nostroots](https://github.com/Trustroots/nostroots).
+We want to do something nice with the hitchhiking.org domain.  One idea is to set up a [nostr based forum](https://github.com/Hitchwiki/hitchhiking.org/issues), in the spirit of [nostroots](https://github.com/Trustroots/nostroots).
 Other ideas are [welcome](https://github.com/Hitchwiki/hitchhiking.org/issues/new).
 
