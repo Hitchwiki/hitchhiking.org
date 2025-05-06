@@ -4,7 +4,7 @@ _This is a temporary placeholder page._
 
 Some of our projects:
 
-* [hitchwiki](https://hitchwiki.org/), since 2004/2006
+* [hitchwiki](https://hitchwiki.org/), since [2005 or so](https://hitchwiki.org/en/Hitchwiki:About#Background)
 * [trashwiki](https://trashwiki.org/), since 2008
 * [trustroots](https://trustroots.org/), since 2014
 * [hitchmap](https://hitchmap.com/)
