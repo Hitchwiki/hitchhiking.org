@@ -1,0 +1,35 @@
+name: Monthly Deploy to GitHub Pages
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # Runs at 00:00 UTC on the 1st of every month
+  workflow_dispatch:     # Allows manual trigger from the GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run script to update index.html
+        run: python3 heatmap.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add index.html
+          git commit -m "Monthly update of index.html [skip ci]" || echo "No changes to commit"
+          git push
