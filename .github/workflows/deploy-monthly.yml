@@ -2,7 +2,7 @@ name: Monthly Deploy to GitHub Pages
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # Runs at 00:00 UTC on the 1st of every month
+    - cron: '0 0 1 * *'  # Runs at 00:00 UTC on the 1st of every month to update the hitchhiking waiting time world map
   workflow_dispatch:     # Allows manual trigger from the GitHub UI
 
 jobs:
