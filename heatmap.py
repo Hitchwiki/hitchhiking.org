@@ -23,10 +23,17 @@ template_path = "index_template.html"
 tiles = xyz.CartoDB.Positron
 folium_map = folium.Map(
     tiles=folium.TileLayer(no_wrap=True, tiles=tiles),
-    attr="Heatchmap",
     min_zoom=1,
     max_zoom=5,
 )
+
+# append to attribution
+folium.TileLayer(
+    tiles=tiles,
+    name="Map",
+    attr="&copy;<br>Made by <a href='https://tillwenke.github.io/'>Till Wenke</a><br>Code on <a href='https://github.com/Hitchwiki/hitchhiking.org/blob/main/heatmap.py'>GitHub</a>",
+    no_wrap=True,
+).add_to(folium_map)
 
 
 cmap = colors.ListedColormap(BUCKETS)
@@ -66,7 +73,7 @@ legend = cm.LinearColormap(colors=BUCKETS, index=BOUNDARIES[:-1], vmin=BOUNDARIE
 legend.caption = "Waiting time to catch a ride by hitchhiking (minutes)"
 folium_map.add_child(legend)
 
-### from show.py ###
+### from hitchmap.com show.py ###
 folium_map.get_root().render()
 
 header = folium_map.get_root().header.render()
