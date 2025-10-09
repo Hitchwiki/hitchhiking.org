@@ -5,7 +5,7 @@ Some of our projects:
 * [hitchwiki](https://hitchwiki.org/), since [2005 or so](https://hitchwiki.org/en/Hitchwiki:About#Background)
 * [trashwiki](https://trashwiki.org/), since 2008
 * [trustroots](https://trustroots.org/), since 2014
-* [hitchmap](https://hitchmap.com/)
+* [tripch.at](https://tripch.at), 2025
 * [rideshares.org](https://rideshares.org/), nostr based rideshares application, code at [github.com/kenflannery/rideshares-nostr](https://github.com/kenflannery/rideshares-nostr), since May 2025
 * [randomroads.org](https://randomroads.org/), a magazine about independent forms of traveling, not actively maintained since 2015 or so
 
