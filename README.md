@@ -1,6 +1,6 @@
 # hitchhiking.org
 
-Some of our projects:
+We're a bunch of hitchhiking geeks who love building moneyless FOSS projects that help create real life interaction:
 
 * [hitchwiki](https://hitchwiki.org/), since [2005 or so](https://hitchwiki.org/en/Hitchwiki:About#Background)
 * [trashwiki](https://trashwiki.org/), since 2008
