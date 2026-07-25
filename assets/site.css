@@ -6,14 +6,16 @@
   --green-soft: #dff1e8;
   --hitchwiki: #b73327;
   --hitchwiki-dark: #85261f;
-  --hitchwiki-yellow: #f7d767;
-  --cream: #f5f1e4;
+  --hitchwiki-yellow: #f7df79;
+  --hitchwiki-ochre: #b96800;
+  --hitchwiki-brown: #6e3100;
+  --cream: #fbf7e9;
   --paper: #fffdf7;
-  --ink: #18342e;
-  --muted: #60756e;
+  --ink: #5b2b08;
+  --muted: #76563c;
   --yellow: #f6bb4c;
-  --border: #dce3d7;
-  --shadow: 0 16px 40px rgba(24, 52, 46, 0.12);
+  --border: #e5d8ba;
+  --shadow: 0 16px 40px rgba(110, 49, 0, 0.14);
 }
 
 html {
@@ -25,6 +27,7 @@ html {
 
 body {
   width: 100% !important;
+  min-width: 100vw !important;
   max-width: none !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -40,22 +43,23 @@ body {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  width: 100% !important;
+  width: 100vw !important;
+  max-width: none !important;
   min-height: 5.5rem !important;
   margin: 0 !important;
   padding: 0.8rem clamp(1rem, 3vw, 3rem) !important;
-  color: var(--ink);
+  color: var(--hitchwiki-brown);
   background: var(--hitchwiki-yellow) !important;
-  border-bottom: 1px solid rgba(133, 38, 31, 0.16);
-  box-shadow: 0 4px 18px rgba(83, 65, 20, 0.18);
+  border-bottom: 1px solid rgba(185, 104, 0, 0.24);
+  box-shadow: 0 4px 18px rgba(110, 49, 0, 0.16);
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  color: var(--hitchwiki-dark) !important;
-  font-size: clamp(1.25rem, 2.2vw, 1.8rem) !important;
+  color: var(--hitchwiki-brown) !important;
+  font-size: clamp(1.45rem, 2.4vw, 2.05rem) !important;
   font-weight: 900 !important;
   letter-spacing: -0.035em !important;
   text-decoration: none;
@@ -79,26 +83,26 @@ body {
 
 .header-nav a {
   padding: 0.55rem 0.75rem;
-  color: var(--hitchwiki-dark) !important;
+  color: var(--hitchwiki-brown) !important;
   border-radius: 0.65rem;
-  font-size: 0.9rem;
+  font-size: 1.02rem;
   font-weight: 800;
   text-decoration: none;
 }
 
 .header-nav a:hover {
-  background: rgba(183, 51, 39, 0.1);
+  background: rgba(185, 104, 0, 0.13);
 }
 
 .identity-pill {
   min-height: 2.7rem;
   padding: 0.55rem 0.85rem !important;
-  color: var(--hitchwiki-dark) !important;
+  color: var(--hitchwiki-brown) !important;
   background: rgba(255, 255, 255, 0.32) !important;
-  border: 1px solid rgba(133, 38, 31, 0.25) !important;
+  border: 1px solid rgba(110, 49, 0, 0.25) !important;
   border-radius: 0.7rem !important;
   font-family: inherit !important;
-  font-size: 0.86rem !important;
+  font-size: 0.98rem !important;
   font-weight: 800 !important;
   white-space: nowrap;
 }
@@ -111,10 +115,11 @@ body {
 
 .layout {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-columns: 50vw 50vw !important;
   align-items: start;
   min-height: calc(100vh - 5.5rem) !important;
-  width: 100% !important;
+  width: 100vw !important;
+  min-width: 100vw !important;
   max-width: none !important;
 }
 
@@ -150,21 +155,29 @@ body {
 }
 
 main {
+  min-width: 0;
   width: auto !important;
   margin: 0 !important;
   padding: clamp(2.2rem, 5vw, 5rem) !important;
   background:
-    linear-gradient(rgba(255, 253, 247, 0.88), rgba(255, 253, 247, 0.94)),
+    linear-gradient(rgba(255, 253, 247, 0.82), rgba(255, 253, 247, 0.88)),
     url("hitchhiker-luxemburg-1977.jpg") center / cover fixed !important;
 }
 
 .about-line {
-  max-width: 47rem;
-  margin: 0 0 1.5rem;
-  color: var(--ink);
-  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
-  font-weight: 700;
-  line-height: 1.45;
+  max-width: none;
+  margin: 0 0 1.8rem;
+  padding: 1.1rem 1.25rem;
+  color: var(--hitchwiki-brown);
+  background: rgba(247, 223, 121, 0.86);
+  border: 1px solid rgba(185, 104, 0, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 8px 22px rgba(83, 65, 20, 0.08);
+  font-family: Nunito, Avenir Next, system-ui, sans-serif;
+  font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1.32;
+  letter-spacing: -0.025em;
 }
 
 .intro {
@@ -175,7 +188,7 @@ main {
 
 .eyebrow {
   margin: 0 0 0.65rem !important;
-  color: var(--green) !important;
+  color: var(--hitchwiki-ochre) !important;
   font-size: 0.75rem !important;
   font-weight: 900 !important;
   letter-spacing: 0.14em !important;
@@ -184,7 +197,7 @@ main {
 
 h1,
 h2 {
-  color: var(--ink) !important;
+  color: var(--hitchwiki-brown) !important;
   font-family: inherit !important;
   line-height: 1.05 !important;
   letter-spacing: -0.045em !important;
@@ -217,7 +230,7 @@ h1 {
   position: relative;
   display: flex !important;
   flex-direction: column;
-  min-height: 8.8rem !important;
+  min-height: 10.2rem !important;
   padding: 1.15rem !important;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.86) !important;
@@ -229,7 +242,7 @@ h1 {
 
 .projects li:hover {
   z-index: 1;
-  border-color: #a9caba !important;
+  border-color: #d3ad6e !important;
   box-shadow: var(--shadow) !important;
   transform: translateY(-3px);
 }
@@ -238,7 +251,7 @@ h1 {
   position: absolute;
   top: 0.95rem;
   right: 1rem;
-  color: #9fb1aa;
+  color: rgba(185, 104, 0, 0.55);
   font-size: 1.1rem;
   content: "↗";
 }
@@ -252,7 +265,7 @@ h1 {
 
 .projects a {
   padding-right: 1.2rem;
-  color: var(--green) !important;
+  color: var(--hitchwiki-ochre) !important;
   font-size: 1.05rem !important;
   font-weight: 900 !important;
   text-decoration: none;
@@ -264,20 +277,36 @@ h1 {
   font-size: 0.89rem !important;
 }
 
-.project-logo {
-  width: 2.8rem !important;
-  height: 2.8rem !important;
-  margin: -0.2rem 0 0.45rem !important;
-  object-fit: contain;
-  object-position: left center;
+.project-logo,
+.projects span.project-icon {
+  display: grid;
+  place-items: center;
+  width: 3.65rem !important;
+  height: 3.65rem !important;
+  box-sizing: border-box;
+  margin: -0.15rem 0 0.7rem !important;
+  padding: 0.45rem;
+  background: #fff9df;
+  border: 1px solid #ead9aa;
+  border-radius: 1rem;
+  box-shadow: 0 3px 9px rgba(24, 52, 46, 0.08);
 }
 
-.project-icon {
-  display: block;
-  height: 2.8rem;
-  margin: -0.2rem 0 0.45rem;
-  font-size: 2.15rem;
-  line-height: 2.8rem;
+.project-logo {
+  object-fit: contain;
+  object-position: center;
+}
+
+.projects span.project-icon {
+  color: initial !important;
+  font-size: 2rem !important;
+  line-height: 1 !important;
+}
+
+.projects li:hover .project-logo,
+.projects li:hover .project-icon {
+  border-color: #b9cabe;
+  transform: scale(1.04);
 }
 
 .ideas {
@@ -297,7 +326,7 @@ h1 {
 .ideas a,
 .note a,
 footer a {
-  color: var(--green-dark) !important;
+  color: var(--hitchwiki-ochre) !important;
   font-weight: 800;
 }
 
@@ -312,7 +341,8 @@ footer {
   align-items: center;
   justify-content: flex-end;
   gap: 1.2rem;
-  width: 100% !important;
+  width: 100vw !important;
+  min-width: 100vw !important;
   max-width: none !important;
   margin: 0 !important;
   padding: 1.5rem clamp(1rem, 3vw, 3rem) 2rem !important;
@@ -334,12 +364,27 @@ footer {
 
 .github-link {
   display: inline-flex;
-  color: var(--ink) !important;
+  color: var(--hitchwiki-brown) !important;
 }
 
-.github-link svg {
+.github-link svg,
+.commit-link svg {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+.commit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--hitchwiki-brown) !important;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.commit-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
 }
 
 .license-badge {
@@ -355,6 +400,7 @@ footer {
 @media (max-width: 980px) {
   .layout {
     grid-template-columns: 1fr !important;
+    width: 100vw !important;
   }
 
   .map {
@@ -395,7 +441,7 @@ footer {
   }
 
   .projects li {
-    min-height: 7.7rem !important;
+    min-height: 9.2rem !important;
   }
 
   footer {

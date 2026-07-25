@@ -46,10 +46,10 @@
       body { background: #f4f1e6; } header, footer { width: min(1440px, calc(100% - 3rem)); } header { min-height: 6.5rem; } .brand { gap: .8rem; } .brand-logo { width: 2.9rem; height: 2.9rem; object-fit: contain; } .header-nav { display: flex; gap: 1.25rem; font-size: .9rem; font-weight: 700; } .header-nav a { color: var(--ink); text-decoration: none; }
       .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 1fr); min-height: calc(100vh - 6.5rem); } .map { position: sticky; top: 0; width: 100%; height: calc(100vh - 6.5rem); border: 0; border-radius: 0; box-shadow: none; } .map::after { bottom: 1.25rem; left: 1.25rem; } main { width: auto; margin: 0; padding: clamp(2.5rem, 5vw, 5.5rem); background: #fffdf7; } .intro { max-width: 43rem; margin: 0 0 2rem; text-align: left; } h1 { font-size: clamp(2.6rem, 4.5vw, 5rem); } .projects { grid-template-columns: repeat(2, 1fr); } .projects li { min-height: 8.5rem; } .project-logo { display: block; width: 3rem; height: 3rem; margin: -.3rem 0 .5rem; object-fit: contain; object-position: left center; } .heritage { display: grid; grid-template-columns: .9fr 1.1fr; gap: 1.2rem; margin: 2rem 0; padding: 1rem; border-radius: 1rem; background: #e4ead7; } .heritage img { width: 100%; height: 100%; min-height: 13rem; object-fit: cover; border-radius: .65rem; } .heritage p { margin-bottom: 0; } .community { grid-template-columns: 1fr; margin-top: 2rem; } .community iframe { min-height: 15rem; } .ideas { margin-top: 2rem; } footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.5rem 0 2.5rem; color: #587068; font-size: .88rem; } .footer-links { display: flex; flex-wrap: wrap; gap: 1rem; }
       @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .map { position: relative; top: auto; height: 58vh; } } @media (max-width: 580px) { header, footer { width: min(100% - 2rem, 1440px); } .header-nav { display: none; } .projects, .heritage { grid-template-columns: 1fr; } main { padding: 2.5rem 1rem; } .heritage img { max-height: 18rem; } footer { align-items: flex-start; flex-direction: column; } }
-      .site-header { width:100%; min-height:5.75rem; margin:0; padding:0 2.5rem; background:#0b8569; box-shadow:inset 0 -1px rgba(255,255,255,.25); } .site-header .brand,.site-header .header-nav a { color:#fff; } .site-header .brand-logo { border-radius:.65rem; object-fit:cover; filter:drop-shadow(0 1px 0 rgba(0,0,0,.15)); } .site-header .header-nav { margin-left:auto; } .identity-pill { border:1px solid rgba(255,255,255,.4); border-radius:.7rem; padding:.55rem .85rem; color:#fff; background:rgba(255,255,255,.1); font:inherit; font-weight:700; cursor:pointer; } .identity-pill[data-state="connected"] { background:#f6bb4c; border-color:#f6bb4c; color:#18342e; } .identity-pill[data-state="pending"] { opacity:.8; }
+      .site-header { width:100%; min-height:5.75rem; margin:0; padding:0 2.5rem; background:#f7df79; box-shadow:inset 0 -1px rgba(185,104,0,.24); } .site-header .brand,.site-header .header-nav a { color:#6e3100; } .site-header .brand-logo { border-radius:.65rem; object-fit:cover; filter:drop-shadow(0 1px 0 rgba(0,0,0,.15)); } .site-header .header-nav { margin-left:auto; } .identity-pill { border:1px solid rgba(110,49,0,.25); border-radius:.7rem; padding:.55rem .85rem; color:#6e3100; background:rgba(255,255,255,.32); font:inherit; font-weight:700; cursor:pointer; } .identity-pill[data-state="connected"] { background:#0b8468; border-color:#0b8468; color:#fff; } .identity-pill[data-state="pending"] { opacity:.8; }
       .footer-meta { display:flex; flex-wrap:wrap; align-items:center; gap:.8rem; } .github-link { display:inline-flex; color:var(--ink); } .github-link svg { width:1.25rem; height:1.25rem; } .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
     </style>
-    <link rel="stylesheet" href="assets/site.css" />
+    <link rel="stylesheet" href="assets/site.css?v=20260725-4" />
   </head>
 
   <body>
@@ -67,34 +67,28 @@
     <main>
       <p class="about-line">We're a bunch of hitchhiking geeks who love building moneyless FOSS projects that help create real life interaction.</p>
       <ul class="projects">
-        <li><a href="https://maps.hitchwiki.org/">Hitchwiki maps</a><span>Find and share places to hitch a ride.</span></li>
+        <li><img class="project-logo" src="assets/hitchwiki-logo.png" alt="" /><a href="https://maps.hitchwiki.org/">Hitchwiki maps</a><span>Find and share places to hitch a ride.</span></li>
         <li>
           <img class="project-logo" src="assets/hitchwiki-logo.png" alt="" /><a href="https://hitchwiki.org/">Hitchwiki</a><span>Practical ridesharing knowledge since 2005.</span>
         </li>
         <li><img class="project-logo" src="trashwiki.jpg" alt="" /><a href="https://trashwiki.org/">Trashwiki</a><span>Freegan and low-impact travel since 2008.</span></li>
         <li><img class="project-logo" src="assets/trustroots.png" alt="" /><a href="https://trustroots.org/">Trustroots</a><span>A community for sharing hospitality since 2014.</span></li>
-        <li><a href="https://forum.hitchhiking.org/">Hitchhiking forum</a><span>Questions, stories and conversations from the road.</span></li>
+        <li><img class="project-logo" src="assets/hitchwiki-logo.png" alt="" /><a href="https://forum.hitchhiking.org/">Hitchhiking forum</a><span>Questions, stories and conversations from the road. Established in 2026.</span></li>
         <li><img class="project-logo" src="assets/signal-logo.svg" alt="" /><a href="https://signal.group/#CjQKIGgw5-FMZ1Sq67CL50LKCkZg-6i0KCDuS24S4uBDyb5IEhAmnOqOcim9eSMm-TJFozyg">Hitchwiki Signal chat</a><span>Join the Hitchwiki community on Signal.</span></li>
         <li><img class="project-logo" src="assets/euro-hitchhikers.png" alt="" /><a href="https://europe.hitchwiki.org/">Hitchwiki Europe</a><span>Local travel knowledge across Europe.</span></li>
         <li><span class="project-icon" aria-hidden="true">🚛</span><a href="https://dumps.hitchwiki.org/">Hitchwiki dumps</a><span>Download Hitchwiki data and archives.</span></li>
-        <li><a href="https://digihitch.hitchwiki.org/">Digihitch archive</a><span>Explore the restored parts of Digihitch.</span></li>
+        <li><span class="project-icon" aria-hidden="true">🛣️</span><a href="https://digihitch.hitchwiki.org/">Digihitch archive</a><span>Explore the restored parts of Digihitch.</span></li>
         <li>
-          <a href="https://rideshares.org/">Rideshares.org</a><span>A Nostr-based ridesharing application, launched in 2025.</span>
+          <span class="project-icon" aria-hidden="true">🚗</span><a href="https://rideshares.org/">Rideshares.org</a><span>A Nostr-based ridesharing application, launched in 2025.</span>
         </li>
         <li>
-          <a href="https://randomroads.org/">Random Roads</a><span>A magazine about independent travel.</span>
+          <span class="project-icon" aria-hidden="true">🧭</span><a href="https://randomroads.org/">Random Roads</a><span>A magazine about independent travel.</span>
         </li>
+        <li><span class="project-icon" aria-hidden="true">💡</span><a href="https://github.com/Hitchwiki/hitchhiking.org/issues/new">More ideas are welcome.</a><span>Share an idea for hitchhiking.org.</span></li>
       </ul>
-
-      <p class="note">
-        More ideas are
-        <a href="https://github.com/Hitchwiki/hitchhiking.org/issues/new"
-          >welcome</a
-        >.
-      </p>
     </main>
     </div>
-    <footer><div class="footer-meta"><span>Page: <time id="page-date">—</time></span><span>Last commit: <time id="commit-date">—</time></span><a class="license-badge" href="https://creativecommons.org/licenses/by-sa/4.0/" aria-label="Content licensed under Creative Commons Attribution-ShareAlike 4.0"><img src="assets/cc-by-sa.png" alt="CC BY-SA 4.0" /></a><a class="github-link" href="https://github.com/Hitchwiki/hitchhiking.org" aria-label="Hitchhiking.org on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.23.48-2.7-.95-2.7-.95-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.89.88 2.35.67.07-.52.28-.88.51-1.08-1.78-.2-3.65-.89-3.65-3.96 0-.87.31-1.58.82-2.14-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.8c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.14 0 3.08-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="visually-hidden">GitHub project</span></a></div></footer>
+    <footer><div class="footer-meta"><span>Page: <time id="page-date">—</time></span><a class="commit-link" href="https://github.com/Hitchwiki/hitchhiking.org/commits/main" aria-label="View the latest commits on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.23.48-2.7-.95-2.7-.95-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.89.88 2.35.67.07-.52.28-.88.51-1.08-1.78-.2-3.65-.89-3.65-3.96 0-.87.31-1.58.82-2.14-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.8c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.14 0 3.08-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span>Last commit: <time id="commit-date">—</time></span></a><a class="license-badge" href="https://creativecommons.org/licenses/by-sa/4.0/" aria-label="Content licensed under Creative Commons Attribution-ShareAlike 4.0"><img src="assets/cc-by-sa.png" alt="CC BY-SA 4.0" /></a></div></footer>
     <script src="assets/nostr-identity.js"></script><script>fetch('site-meta.json').then(r => r.ok ? r.json() : Promise.reject()).then(meta => { const format = value => new Date(value).toISOString().slice(0, 16).replace('T', ' '); document.getElementById('page-date').textContent = format(meta.deployedAt); document.getElementById('commit-date').textContent = format(meta.commitAt); }).catch(() => {});</script>
   </body>
 </html>
