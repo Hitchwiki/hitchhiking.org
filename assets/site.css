@@ -108,9 +108,9 @@ body {
 }
 
 .identity-pill[data-state="connected"] {
-  color: white !important;
-  background: var(--green) !important;
-  border-color: var(--green) !important;
+  color: var(--hitchwiki-brown) !important;
+  background: rgba(255, 253, 247, 0.58) !important;
+  border-color: rgba(110, 49, 0, 0.32) !important;
 }
 
 .layout {
