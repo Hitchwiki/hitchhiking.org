@@ -1,9 +1,12 @@
-name: Monthly Deploy to GitHub Pages
+name: Refresh hitchhiking map
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # Runs at 00:00 UTC on the 1st of every month to update the hitchhiking waiting time world map
-  workflow_dispatch:     # Allows manual trigger from the GitHub UI
+    - cron: '0 0 1 * *' # 00:00 UTC on the first day of every month
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
@@ -26,10 +29,10 @@ jobs:
       - name: Run script to update index.html
         run: python3 heatmap.py
 
-      - name: Commit and push changes
+      - name: Commit the refreshed map
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add index.html
-          git commit -m "Monthly update of index.html [skip ci]" || echo "No changes to commit"
+          git commit -m "Refresh hitchhiking map" || echo "No map changes to commit"
           git push
