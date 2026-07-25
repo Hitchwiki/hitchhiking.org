@@ -6,6 +6,7 @@
   --green-soft: #dff1e8;
   --hitchwiki: #b73327;
   --hitchwiki-dark: #85261f;
+  --hitchwiki-yellow: #f7d767;
   --cream: #f5f1e4;
   --paper: #fffdf7;
   --ink: #18342e;
@@ -17,9 +18,14 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: none;
+  overflow-x: hidden;
 }
 
 body {
+  width: 100% !important;
+  max-width: none !important;
   margin: 0 !important;
   padding: 0 !important;
   color: var(--ink) !important;
@@ -38,17 +44,17 @@ body {
   min-height: 5.5rem !important;
   margin: 0 !important;
   padding: 0.8rem clamp(1rem, 3vw, 3rem) !important;
-  color: white;
-  background: linear-gradient(105deg, var(--hitchwiki-dark), var(--hitchwiki) 55%, #c74831) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
-  box-shadow: 0 4px 18px rgba(83, 25, 20, 0.22);
+  color: var(--ink);
+  background: var(--hitchwiki-yellow) !important;
+  border-bottom: 1px solid rgba(133, 38, 31, 0.16);
+  box-shadow: 0 4px 18px rgba(83, 65, 20, 0.18);
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  color: white !important;
+  color: var(--hitchwiki-dark) !important;
   font-size: clamp(1.25rem, 2.2vw, 1.8rem) !important;
   font-weight: 900 !important;
   letter-spacing: -0.035em !important;
@@ -73,7 +79,7 @@ body {
 
 .header-nav a {
   padding: 0.55rem 0.75rem;
-  color: white !important;
+  color: var(--hitchwiki-dark) !important;
   border-radius: 0.65rem;
   font-size: 0.9rem;
   font-weight: 800;
@@ -81,15 +87,15 @@ body {
 }
 
 .header-nav a:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(183, 51, 39, 0.1);
 }
 
 .identity-pill {
   min-height: 2.7rem;
   padding: 0.55rem 0.85rem !important;
-  color: white !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.38) !important;
+  color: var(--hitchwiki-dark) !important;
+  background: rgba(255, 255, 255, 0.32) !important;
+  border: 1px solid rgba(133, 38, 31, 0.25) !important;
   border-radius: 0.7rem !important;
   font-family: inherit !important;
   font-size: 0.86rem !important;
@@ -98,9 +104,9 @@ body {
 }
 
 .identity-pill[data-state="connected"] {
-  color: var(--ink) !important;
-  background: var(--yellow) !important;
-  border-color: var(--yellow) !important;
+  color: white !important;
+  background: var(--green) !important;
+  border-color: var(--green) !important;
 }
 
 .layout {
@@ -108,6 +114,8 @@ body {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
   align-items: start;
   min-height: calc(100vh - 5.5rem) !important;
+  width: 100% !important;
+  max-width: none !important;
 }
 
 .map {
@@ -146,8 +154,17 @@ main {
   margin: 0 !important;
   padding: clamp(2.2rem, 5vw, 5rem) !important;
   background:
-    radial-gradient(circle at 100% 0, rgba(11, 132, 104, 0.1), transparent 18rem),
-    var(--paper) !important;
+    linear-gradient(rgba(255, 253, 247, 0.88), rgba(255, 253, 247, 0.94)),
+    url("hitchhiker-luxemburg-1977.jpg") center / cover fixed !important;
+}
+
+.about-line {
+  max-width: 47rem;
+  margin: 0 0 1.5rem;
+  color: var(--ink);
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .intro {
@@ -255,19 +272,12 @@ h1 {
   object-position: left center;
 }
 
-.road-photo {
-  height: clamp(12rem, 22vw, 19rem);
-  margin: 1.8rem 0;
-  overflow: hidden;
-  border-radius: 1.1rem;
-  box-shadow: var(--shadow);
-}
-
-.road-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 36%;
+.project-icon {
+  display: block;
+  height: 2.8rem;
+  margin: -0.2rem 0 0.45rem;
+  font-size: 2.15rem;
+  line-height: 2.8rem;
 }
 
 .ideas {
@@ -302,9 +312,10 @@ footer {
   align-items: center;
   justify-content: flex-end;
   gap: 1.2rem;
-  width: min(1440px, calc(100% - 3rem)) !important;
-  margin: 0 auto !important;
-  padding: 1.5rem 0 2rem !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 1.5rem clamp(1rem, 3vw, 3rem) 2rem !important;
   color: var(--muted) !important;
   font-size: 0.84rem !important;
 }
@@ -329,6 +340,16 @@ footer {
 .github-link svg {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+.license-badge {
+  display: inline-flex;
+  align-items: center;
+}
+
+.license-badge img {
+  width: 71px;
+  height: 25px;
 }
 
 @media (max-width: 980px) {
@@ -366,6 +387,7 @@ footer {
 
   main {
     padding: 2.5rem 1rem !important;
+    background-attachment: scroll !important;
   }
 
   .projects {
@@ -379,6 +401,6 @@ footer {
   footer {
     align-items: flex-start;
     flex-direction: column;
-    width: calc(100% - 2rem) !important;
+    width: 100% !important;
   }
 }
