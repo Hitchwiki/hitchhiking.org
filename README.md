@@ -18,3 +18,12 @@ This is a temporary placeholder page.  We want to do something nice with the hit
 
 More ideas are [welcome](https://github.com/Hitchwiki/hitchhiking.org/issues/new).
 
+## License
+
+This repository is dual-licensed:
+
+- Original content and design: [CC BY-SA 4.0](LICENSE-CONTENT.md)
+- Software and source code: [AGPL-3.0-only](LICENSE-SOFTWARE.md)
+
+Third-party assets remain subject to their own licenses and trademark terms.
+See [LICENSE](LICENSE) for the scope and exceptions.
