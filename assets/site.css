@@ -247,7 +247,7 @@ h1 {
 .projects li {
   position: relative;
   display: grid !important;
-  grid-template-columns: 5rem minmax(0, 1fr);
+  grid-template-columns: 5.6rem minmax(0, 1fr);
   grid-template-rows: auto 1fr;
   column-gap: 1rem;
   align-content: start;
@@ -309,15 +309,15 @@ h1 {
   grid-column: 1;
   grid-row: 1 / span 2;
   place-items: center;
-  width: 5rem !important;
-  height: 5rem !important;
+  width: 5.6rem !important;
+  height: 5.6rem !important;
   box-sizing: border-box;
   margin: 0 !important;
-  padding: 0.55rem;
-  background: #fff9df;
-  border: 1px solid #ead9aa;
-  border-radius: 1rem;
-  box-shadow: 0 3px 9px rgba(24, 52, 46, 0.08);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0.65rem;
+  box-shadow: none;
 }
 
 .project-logo {
@@ -333,7 +333,6 @@ h1 {
 
 .projects li:hover .project-logo,
 .projects li:hover .project-icon {
-  border-color: #b9cabe;
   transform: scale(1.04);
 }
 
@@ -369,12 +368,13 @@ footer {
   align-items: center;
   justify-content: flex-end;
   gap: 1.2rem;
-  width: 100vw !important;
-  min-width: 100vw !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 1.5rem clamp(1rem, 3vw, 3rem) 2rem !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 1.5rem 0 0 !important;
+  padding: 1.25rem 0 0 !important;
   color: var(--muted) !important;
+  border-top: 1px solid rgba(185, 104, 0, 0.18);
   font-size: 0.84rem !important;
 }
 
