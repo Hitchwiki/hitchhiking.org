@@ -25,6 +25,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Record deployment metadata
+        run: |
+          printf '{"deployedAt":"%s","commitAt":"%s"}\n' \
+            "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+            "$(git log -1 --format=%cI)" > site-meta.json
       - name: Upload the site
         uses: actions/upload-pages-artifact@v3
         with:
