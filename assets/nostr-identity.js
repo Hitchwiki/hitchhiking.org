@@ -19,14 +19,32 @@
     socket.onmessage = ({ data }) => { try { const message = JSON.parse(data); if (message[0] === 'EVENT') { const handle = trustrootsHandle(message[2]); if (handle) { clearTimeout(timer); finish(handle); } } if (message[0] === 'EOSE') { clearTimeout(timer); finish(); } } catch (_) {} };
     socket.onerror = () => { clearTimeout(timer); finish(); };
   });
+  let connecting = false;
   const connect = async () => {
-    if (!window.nostr?.getPublicKey) return setStatus('Nostr: no NIP-07 signer');
+    if (connecting) return false;
+    if (!window.nostr?.getPublicKey) return false;
+    connecting = true;
     setStatus('Nostr: checking identity…', 'pending');
     try {
       const pubkey = String(await window.nostr.getPublicKey()).toLowerCase();
       const handle = await lookup(pubkey);
       setStatus(handle ? handle : `Nostr: ${pubkey.slice(0, 8)}…`, handle ? 'connected' : 'unlinked');
-    } catch (_) { setStatus('Nostr: signer not connected'); }
+    } catch (_) {
+      setStatus('Nostr: signer detected — click to connect', 'unlinked');
+    } finally {
+      connecting = false;
+    }
+    return true;
   };
-  connect();
+  const startedAt = Date.now();
+  const timer = setInterval(async () => {
+    if (await connect()) return clearInterval(timer);
+    if (Date.now() - startedAt > 12000) {
+      clearInterval(timer);
+      setStatus('Nostr: no NIP-07 signer');
+    } else {
+      setStatus('Nostr: waiting for NIP-07…', 'pending');
+    }
+  }, 250);
+  status.addEventListener('click', connect);
 })();
