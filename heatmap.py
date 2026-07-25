@@ -25,6 +25,7 @@ folium_map = folium.Map(
     tiles=folium.TileLayer(no_wrap=True, tiles=tiles),
     min_zoom=1,
     max_zoom=5,
+    zoom_start=2,
 )
 
 # append to attribution

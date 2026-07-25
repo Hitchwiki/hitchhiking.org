@@ -139,6 +139,7 @@
       .site-header { width:100%; min-height:5.75rem; margin:0; padding:0 2.5rem; background:#0b8569; box-shadow:inset 0 -1px rgba(255,255,255,.25); } .site-header .brand,.site-header .header-nav a { color:#fff; } .site-header .brand-logo { border-radius:.65rem; object-fit:cover; filter:drop-shadow(0 1px 0 rgba(0,0,0,.15)); } .site-header .header-nav { margin-left:auto; } .identity-pill { border:1px solid rgba(255,255,255,.4); border-radius:.7rem; padding:.55rem .85rem; color:#fff; background:rgba(255,255,255,.1); font:inherit; font-weight:700; cursor:pointer; } .identity-pill[data-state="connected"] { background:#f6bb4c; border-color:#f6bb4c; color:#18342e; } .identity-pill[data-state="pending"] { opacity:.8; } .footer-meta { display:flex; flex-wrap:wrap; align-items:center; gap:.8rem; } .github-link { display:inline-flex; color:var(--ink); } .github-link svg { width:1.25rem; height:1.25rem; } .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
       @media (max-width:900px) { .layout { grid-template-columns:1fr; } .map { position:relative; top:auto; height:58vh; } } @media (max-width:580px) { header,footer { width:min(100% - 2rem,1440px); } .header-nav { display:none; } .projects,.heritage { grid-template-columns:1fr; } main { padding:2.5rem 1rem; } .heritage img { max-height:18rem; } footer { align-items:flex-start; flex-direction:column; } }
     </style>
+    <link rel="stylesheet" href="assets/site.css" />
   </head>
 
   <body>
@@ -161,7 +162,7 @@
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
                     ...{
-  "zoom": 1,
+  "zoom": 2,
   "zoomControl": true,
   "preferCanvas": false,
 }
@@ -281,21 +282,21 @@
       <div class="intro"><p class="eyebrow">A network of independent travel projects</p><h1>The open road belongs to all of us.</h1><p>Free, community-run tools and spaces for people who choose to travel differently.</p></div>
       <ul class="projects">
         <li><img class="project-logo" src="assets/hitchwiki-logo.png" alt="" /><a href="https://hitchwiki.org/">Hitchwiki</a><span>Practical ridesharing knowledge since 2005.</span></li>
-        <li><a href="https://trashwiki.org/">Trashwiki</a><span>Freegan and low-impact travel since 2008.</span></li>
+        <li><img class="project-logo" src="trashwiki.jpg" alt="" /><a href="https://trashwiki.org/">Trashwiki</a><span>Freegan and low-impact travel since 2008.</span></li>
         <li><img class="project-logo" src="assets/trustroots.png" alt="" /><a href="https://trustroots.org/">Trustroots</a><span>A community for sharing hospitality since 2014.</span></li>
         <li><a href="https://forum.hitchhiking.org/">Hitchhiking forum</a><span>Questions, stories and conversations from the road.</span></li>
         <li><a href="https://signal.group/#CjQKIGgw5-FMZ1Sq67CL50LKCkZg-6i0KCDuS24S4uBDyb5IEhAmnOqOcim9eSMm-TJFozyg">Hitchwiki Signal chat</a><span>Join the Hitchwiki community on Signal.</span></li>
-        <li><a href="https://europe.hitchwiki.org/">Hitchwiki Europe</a><span>Local travel knowledge across Europe.</span></li>
+        <li><img class="project-logo" src="assets/euro-hitchhikers.png" alt="" /><a href="https://europe.hitchwiki.org/">Hitchwiki Europe</a><span>Local travel knowledge across Europe.</span></li>
         <li><a href="https://maps.hitchwiki.org/">Hitchwiki maps</a><span>Find and share places to hitch a ride.</span></li>
         <li><a href="https://rideshares.org/">Rideshares.org</a><span>A Nostr-based ridesharing application, launched in 2025.</span></li>
         <li><a href="https://randomroads.org/">Random Roads</a><span>A magazine about independent travel.</span></li>
       </ul>
-      <section class="heritage"><img src="assets/hitchhiker-luxemburg-1977.jpg" alt="A hitchhiker beside a road in Luxembourg, 1977" /><div><p class="eyebrow">The road remembers</p><h2>Hitchhiking has always been a human network.</h2><p>One raised thumb can be an invitation to share stories, routes and a little trust.</p></div></section>
+      <div class="road-photo"><img src="assets/hitchhiker-luxemburg-1977.jpg" alt="A hitchhiker beside a road in Luxembourg, 1977" /></div>
       <section class="ideas"><p>Hitchhiking.org is a work in progress. Help us decide what comes next:</p><ul><li>set up a <a href="https://github.com/Hitchwiki/hitchhiking.org/issues">Nostr-based forum</a>, in the spirit of <a href="https://github.com/Trustroots/nostroots">Nostroots</a></li><li><a href="https://digihitch.hitchwiki.org/">explore the restored parts of Digihitch</a></li><li><a href="https://github.com/Hitchwiki/hitchhiking.org/issues/4">ai.hitchhiking.org</a></li></ul></section>
       <p class="note">More ideas are <a href="https://github.com/Hitchwiki/hitchhiking.org/issues/new">welcome</a>.</p>
     </main>
     </div>
-    <footer><div class="footer-meta"><span>Made with care for independent travellers.</span><span>Page: <time id="page-date">—</time></span><span>Last commit: <time id="commit-date">—</time></span><a class="github-link" href="https://github.com/Hitchwiki/hitchhiking.org" aria-label="Hitchhiking.org on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.23.48-2.7-.95-2.7-.95-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.89.88 2.35.67.07-.52.28-.88.51-1.08-1.78-.2-3.65-.89-3.65-3.96 0-.87.31-1.58.82-2.14-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.8c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.14 0 3.08-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="visually-hidden">GitHub project</span></a></div><nav class="footer-links" aria-label="Footer links"><a href="https://hitchwiki.org/">Hitchwiki</a><a href="https://forum.hitchhiking.org/">Forum</a><a href="https://github.com/Hitchwiki/hitchhiking.org/issues/new">Share an idea</a></nav></footer>
+    <footer><div class="footer-meta"><span>Page: <time id="page-date">—</time></span><span>Last commit: <time id="commit-date">—</time></span><a class="github-link" href="https://github.com/Hitchwiki/hitchhiking.org" aria-label="Hitchhiking.org on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.23.48-2.7-.95-2.7-.95-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.89.88 2.35.67.07-.52.28-.88.51-1.08-1.78-.2-3.65-.89-3.65-3.96 0-.87.31-1.58.82-2.14-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.8c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.14 0 3.08-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="visually-hidden">GitHub project</span></a></div></footer>
     <script src="assets/nostr-identity.js"></script><script>fetch('site-meta.json').then(r => r.ok ? r.json() : Promise.reject()).then(meta => { const format = value => new Date(value).toISOString().slice(0, 16).replace('T', ' '); document.getElementById('page-date').textContent = format(meta.deployedAt); document.getElementById('commit-date').textContent = format(meta.commitAt); }).catch(() => {});</script>
   </body>
 </html>
