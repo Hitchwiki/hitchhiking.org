@@ -1,5 +1,6 @@
+import { parseNip05Identifier, publicKeyForNip05 } from './identity.js';
+
 (() => {
-  const allowedDomains = new Set(['hitchwiki.org', 'trustroots.org']);
   const form = document.querySelector('#identity-form');
   const input = document.querySelector('#nip05');
   const status = document.querySelector('#status');
@@ -8,6 +9,9 @@
   const nip07 = document.querySelector('#nip07');
   const nip46 = document.querySelector('#nip46');
   const remoteDialog = document.querySelector('#remote-signer-dialog');
+  const headerIdentity = document.querySelector('#nostr-identity');
+  const nostrDialog = document.querySelector('#nostr-info');
+  const nostrRetry = document.querySelector('#nostr-retry');
   let verified = null;
 
   const setStatus = (message, type = '') => {
@@ -16,10 +20,7 @@
   };
 
   const readIdentifier = () => {
-    const identifier = input.value.trim().toLowerCase();
-    const match = /^([a-z0-9._-]+)@([a-z0-9.-]+)$/.exec(identifier);
-    if (!match || !allowedDomains.has(match[2])) throw new Error('Use a NIP-05 address at hitchwiki.org or trustroots.org.');
-    return { identifier, name: match[1], domain: match[2] };
+    return parseNip05Identifier(input.value);
   };
 
   const challenge = () => {
@@ -34,11 +35,56 @@
     const response = await fetch(`https://${identity.domain}/.well-known/nostr.json?name=${encodeURIComponent(identity.name)}`, { redirect: 'error' });
     if (!response.ok) throw new Error('This NIP-05 address could not be verified.');
     const data = await response.json();
-    const pubkey = String(data?.names?.[identity.name] || '').toLowerCase();
-    if (!/^[a-f0-9]{64}$/.test(pubkey)) throw new Error('This address does not currently have a valid Nostr public key.');
+    const pubkey = publicKeyForNip05(identity, data);
     verified = { ...identity, pubkey };
     setStatus(`Verified ${identity.identifier}. Now use your signer to prove control of the key.`, 'success');
     result.hidden = true;
+  };
+
+  const profileNip05 = (pubkey) => new Promise((resolve) => {
+    const socket = new WebSocket('wss://relay.trustroots.org');
+    const subscription = `hitchhiking-chat-${Math.random().toString(36).slice(2)}`;
+    const finish = (value = '') => { try { socket.close(); } catch (_) {} resolve(value); };
+    const timer = setTimeout(() => finish(), 3500);
+    socket.onopen = () => socket.send(JSON.stringify(['REQ', subscription, { kinds: [0], authors: [pubkey], limit: 1 }]));
+    socket.onmessage = ({ data }) => {
+      try {
+        const message = JSON.parse(data);
+        if (message[0] === 'EVENT') {
+          const nip05 = JSON.parse(message[2]?.content || '{}').nip05 || '';
+          clearTimeout(timer);
+          finish(String(nip05).toLowerCase());
+        } else if (message[0] === 'EOSE') {
+          clearTimeout(timer);
+          finish();
+        }
+      } catch (_) {}
+    };
+    socket.onerror = () => { clearTimeout(timer); finish(); };
+  });
+
+  const setHeaderIdentity = (label, state = 'missing') => {
+    headerIdentity.textContent = label;
+    headerIdentity.dataset.state = state;
+  };
+
+  const autoDetectIdentity = async () => {
+    if (!window.nostr?.getPublicKey) { setHeaderIdentity('Nostr: no NIP-07 signer'); return; }
+    setHeaderIdentity('Nostr: checking identity…', 'pending');
+    try {
+      const pubkey = String(await window.nostr.getPublicKey()).toLowerCase();
+      const nip05 = await profileNip05(pubkey);
+      if (!nip05) { setHeaderIdentity(`Nostr: ${pubkey.slice(0, 8)}…`, 'unlinked'); return; }
+      input.value = nip05;
+      await validateNip05();
+      if (verified.pubkey !== pubkey) throw new Error('The NIP-05 address is linked to a different Nostr key.');
+      setHeaderIdentity(`Nostr: ${nip05}`, 'connected');
+      setStatus(`Detected and verified ${nip05}. Approve the browser signer below to continue.`, 'success');
+    } catch (error) {
+      verified = null;
+      setHeaderIdentity('Nostr: signer detected — click to connect', 'unlinked');
+      setStatus(error.message || 'Could not automatically verify this Nostr identity.', 'error');
+    }
   };
 
   form.addEventListener('submit', async (event) => {
@@ -74,4 +120,9 @@
   nip46.addEventListener('click', () => remoteDialog.showModal());
   document.querySelector('[data-close-dialog]').addEventListener('click', () => remoteDialog.close());
   remoteDialog.addEventListener('click', (event) => { if (event.target === remoteDialog) remoteDialog.close(); });
+  headerIdentity.addEventListener('click', () => nostrDialog.showModal());
+  document.querySelector('[data-close-nostr-dialog]').addEventListener('click', () => nostrDialog.close());
+  nostrDialog.addEventListener('click', (event) => { if (event.target === nostrDialog) nostrDialog.close(); });
+  nostrRetry.addEventListener('click', autoDetectIdentity);
+  setTimeout(autoDetectIdentity, 250);
 })();

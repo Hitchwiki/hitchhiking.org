@@ -19,6 +19,7 @@ BOUNDARIES = BOUNDARIES[:-1]
 
 outname = "index.html"
 template_path = "index_template.html"
+script_path = "assets/heatmap.js"
 
 tiles = xyz.CartoDB.Positron
 folium_map = folium.Map(
@@ -82,9 +83,19 @@ header = header.replace(
     '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>',
     '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">',
 )
+header = header.replace(
+    """<script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>""",
+    '<script src="assets/map-config.js"></script>',
+)
 
 body = folium_map.get_root().html.render()
 script = folium_map.get_root().script.render()
+
+with open(script_path, "w", encoding="utf-8") as script_out:
+    script_out.write(script)
 
 with (
     open(template_path, encoding="utf-8") as template,

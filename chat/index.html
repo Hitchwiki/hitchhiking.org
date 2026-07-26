@@ -15,11 +15,22 @@
         <img src="/thumbsup-hitchhiking.jpg" alt="" />
         <span>hitchhiking.org</span>
       </a>
-      <nav aria-label="Primary navigation">
+      <nav class="header-nav" aria-label="Site links">
         <a href="https://hitchwiki.org/">Hitchwiki</a>
+        <a href="/chat/">Chat</a>
         <a href="https://forum.hitchhiking.org/">Forum</a>
+        <a href="https://github.com/Hitchwiki/hitchhiking.org/issues">Ideas</a>
       </nav>
+      <button class="identity-pill" id="nostr-identity" type="button" data-state="missing" aria-haspopup="dialog" aria-controls="nostr-info" title="Check your NIP-07 signer and NIP-05 identity">Nostr: checking…</button>
     </header>
+
+    <dialog class="nostr-modal" id="nostr-info" aria-labelledby="nostr-title">
+      <button class="close" type="button" data-close-nostr-dialog aria-label="Close">×</button>
+      <p class="eyebrow">Nostr on the road</p>
+      <h2 id="nostr-title">Your identity, wherever you travel.</h2>
+      <p>When a NIP-07 signer is available, this page automatically checks whether its public key has a valid Hitchwiki or Trustroots NIP-05 identity.</p>
+      <button id="nostr-retry" class="primary" type="button">Check my signer again</button>
+    </dialog>
 
     <main>
       <section class="hero" aria-labelledby="page-title">
@@ -72,7 +83,7 @@
 
       <aside class="notes" aria-label="How it works">
         <div><strong>One identity</strong><span>Your verified NIP-05 name becomes your Matrix name; the Nostr public key remains the secure account link.</span></div>
-        <div><strong>Federated by default</strong><span>Anyone with another Matrix account can still join public Hitchhiking rooms.</span></div>
+        <div><strong>Already use Matrix?</strong><span>Create or use an account at <a href="https://matrix.org/">matrix.org</a> or any other Matrix server, then join public Hitchhiking rooms from your usual client. This page only creates and signs in to local Nostr-based accounts.</span></div>
         <div><strong>You hold the key</strong><span>Protect your Nostr recovery phrase. Losing the key means losing proof of this account.</span></div>
       </aside>
     </main>
@@ -86,6 +97,6 @@
     </dialog>
 
     <footer><a href="/">← Back to hitchhiking.org</a><span>Built around open protocols.</span></footer>
-    <script src="/chat/chat.js"></script>
+    <script type="module" src="/chat/chat.js"></script>
   </body>
 </html>

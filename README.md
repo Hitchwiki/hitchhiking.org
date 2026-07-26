@@ -18,6 +18,18 @@ This is a temporary placeholder page.  We want to do something nice with the hit
 
 More ideas are [welcome](https://github.com/Hitchwiki/hitchhiking.org/issues/new).
 
+## Development
+
+The browser-side NIP-05 identity rules are covered by Vitest:
+
+```sh
+npm install
+npm test
+```
+
+`index.html` is a generated landing page. Run `python heatmap.py` after changing
+the map generation; it refreshes both the page and `assets/heatmap.js`.
+
 ## License
 
 This repository is dual-licensed:
