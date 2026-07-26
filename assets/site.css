@@ -531,8 +531,18 @@ footer {
 
 @media (max-width: 700px) {
   .site-header {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
     min-height: auto !important;
     padding: 0.7rem 1rem !important;
+  }
+
+  .site-header .brand {
+    min-width: 0;
+    flex: 0 1 auto;
+    white-space: nowrap;
   }
 
   .brand-logo {
@@ -546,7 +556,8 @@ footer {
 
   .identity-pill {
     margin-left: auto;
-    max-width: 48vw;
+    min-width: 0;
+    max-width: calc(100vw - 13.5rem);
     overflow: hidden;
     text-overflow: ellipsis;
   }

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7df79" />
+    <meta name="description" content="Passwordless Matrix sign-in for the Hitchhiking community." />
+    <title>Hitchhiking chat</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="/chat/chat.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Hitchhiking.org home">
+        <img src="/thumbsup-hitchhiking.jpg" alt="" />
+        <span>hitchhiking.org</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="https://hitchwiki.org/">Hitchwiki</a>
+        <a href="https://forum.hitchhiking.org/">Forum</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow">Community chat · Matrix + Nostr</p>
+        <h1 id="page-title">A chat account that travels with you.</h1>
+        <p class="lede">Sign in with the Nostr identity you already use at Hitchwiki or Trustroots. No password or email address needed.</p>
+      </section>
+
+      <section class="sign-in-card" aria-labelledby="sign-in-title">
+        <div class="card-heading">
+          <div class="badge" aria-hidden="true">✦</div>
+          <div>
+            <p class="step">Step 1 of 2</p>
+            <h2 id="sign-in-title">Verify your Nostr identity</h2>
+          </div>
+        </div>
+
+        <form id="identity-form" novalidate>
+          <label for="nip05">Your NIP-05 address</label>
+          <div class="input-row">
+            <input id="nip05" name="nip05" type="text" inputmode="email" autocomplete="username" placeholder="you@trustroots.org" spellcheck="false" required />
+            <button class="primary" type="submit">Continue</button>
+          </div>
+          <p class="field-help">Local accounts are available only to verified <strong>@hitchwiki.org</strong> and <strong>@trustroots.org</strong> identities.</p>
+        </form>
+
+        <div class="or"><span>then prove you control it</span></div>
+
+        <div class="signer-options">
+          <button id="nip07" class="signer-button" type="button">
+            <span class="signer-icon">⌁</span>
+            <span><strong>Use browser signer</strong><small>NIP-07 extension</small></span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </button>
+          <button id="nip46" class="signer-button" type="button">
+            <span class="signer-icon">↗</span>
+            <span><strong>Use remote signer</strong><small>NIP-46 · Nostroots and compatible apps</small></span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <p id="status" class="status" role="status" aria-live="polite">Enter your NIP-05 address to begin.</p>
+
+        <div id="result" class="result" hidden>
+          <p class="result-label">Your Hitchhiking Matrix ID</p>
+          <code id="matrix-id"></code>
+          <p class="result-copy">Your browser has signed a one-time login challenge. The final Matrix session will be issued by the chat service.</p>
+        </div>
+      </section>
+
+      <aside class="notes" aria-label="How it works">
+        <div><strong>One identity</strong><span>Your Nostr public key is the stable link. Your Matrix display name can be human-friendly.</span></div>
+        <div><strong>Federated by default</strong><span>Anyone with another Matrix account can still join public Hitchhiking rooms.</span></div>
+        <div><strong>You hold the key</strong><span>Protect your Nostr recovery phrase. Losing the key means losing proof of this account.</span></div>
+      </aside>
+    </main>
+
+    <dialog id="remote-signer-dialog" aria-labelledby="remote-signer-title">
+      <button class="close" type="button" data-close-dialog aria-label="Close">×</button>
+      <p class="eyebrow">NIP-46</p>
+      <h2 id="remote-signer-title">Connect a remote signer</h2>
+      <p>Remote-signing support needs a small sign-in service to create a one-time Nostr Connect request. It will work with compatible signers without exposing your private key to this page.</p>
+      <p class="dialog-note">For now, use a NIP-07 browser signer to test the identity check.</p>
+    </dialog>
+
+    <footer><a href="/">← Back to hitchhiking.org</a><span>Built around open protocols.</span></footer>
+    <script src="/chat/chat.js"></script>
+  </body>
+</html>
