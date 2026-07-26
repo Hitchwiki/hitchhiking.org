@@ -22,20 +22,6 @@
     return { identifier, name: match[1], domain: match[2] };
   };
 
-  const toNpub = (hex) => {
-    const words = [];
-    const bytes = hex.match(/.{2}/g).map((byte) => parseInt(byte, 16));
-    let acc = 0, bits = 0;
-    for (const byte of bytes) { acc = (acc << 8) | byte; bits += 8; while (bits >= 5) { bits -= 5; words.push((acc >> bits) & 31); } }
-    if (bits) words.push((acc << (5 - bits)) & 31);
-    const polymod = (values) => { let chk = 1; for (const value of values) { const top = chk >> 25; chk = ((chk & 0x1ffffff) << 5) ^ value; [0x3b6a57b2,0x26508e6d,0x1ea119fa,0x3d4233dd,0x2a1462b3].forEach((generator, index) => { if ((top >> index) & 1) chk ^= generator; }); } return chk; };
-    const prefix = [...'npub'].map((char) => char.charCodeAt(0) >> 5).concat(0, [...'npub'].map((char) => char.charCodeAt(0) & 31));
-    const checksumValue = polymod(prefix.concat(words).concat([0,0,0,0,0,0])) ^ 1;
-    const charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
-    const checksum = Array.from({ length: 6 }, (_, index) => charset[(checksumValue >> (5 * (5 - index))) & 31]).join('');
-    return `npub1${words.map((word) => charset[word]).join('')}${checksum}`;
-  };
-
   const challenge = () => {
     const bytes = new Uint8Array(16);
     crypto.getRandomValues(bytes);
@@ -77,8 +63,7 @@
         content: JSON.stringify({ purpose: 'hitchhiking-matrix-sign-in', nip05: verified.identifier })
       });
       if (String(signed?.pubkey || '').toLowerCase() !== pubkey || !signed?.sig) throw new Error('The login challenge was not signed by the expected key.');
-      const npub = toNpub(pubkey);
-      matrixId.textContent = `@${npub}:hitchhiking.org`;
+      matrixId.textContent = `@${verified.name}:hitchhiking.org`;
       result.hidden = false;
       setStatus('Identity confirmed. Your account can now be created by the Matrix sign-in service.', 'success');
     } catch (error) {

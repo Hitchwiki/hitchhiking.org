@@ -387,6 +387,21 @@ h1 {
   text-decoration: none;
 }
 
+.experimental-label {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.12rem 0.4rem;
+  color: var(--hitchwiki-brown);
+  background: rgba(247, 223, 121, 0.78);
+  border: 1px solid rgba(185, 104, 0, 0.28);
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
 .projects span {
   grid-column: 2;
   grid-row: 2;
@@ -426,6 +441,31 @@ h1 {
 .projects li:hover .project-logo,
 .projects li:hover .project-icon {
   transform: scale(1.04);
+}
+
+.experiments {
+  margin-top: 3rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid rgba(185, 104, 0, 0.22);
+}
+
+.experiments-heading {
+  max-width: 39rem;
+  margin-bottom: 1.35rem;
+}
+
+.experiments-heading h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.experiments-heading p:last-child {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+}
+
+.ideas-card {
+  margin-top: 1.5rem;
 }
 
 .ideas {
