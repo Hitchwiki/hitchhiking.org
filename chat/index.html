@@ -34,9 +34,9 @@
 
     <main>
       <section class="hero" aria-labelledby="page-title">
-        <p class="eyebrow">Community chat · Matrix + Nostr</p>
-        <h1 id="page-title">A chat account that travels with you.</h1>
-        <p class="lede">Sign in with the Nostr identity you already use at Hitchwiki or Trustroots. No password or email address needed.</p>
+        <p class="eyebrow">Hitchhiking chat</p>
+        <h1 id="page-title">Sign in with Nostr.</h1>
+        <p class="lede">For verified Hitchwiki and Trustroots identities.</p>
       </section>
 
       <section class="sign-in-card" aria-labelledby="sign-in-title">
@@ -54,7 +54,7 @@
             <input id="nip05" name="nip05" type="text" inputmode="email" autocomplete="username" placeholder="you@trustroots.org" spellcheck="false" required />
             <button class="primary" type="submit">Continue</button>
           </div>
-          <p class="field-help">Local accounts are available only to verified <strong>@hitchwiki.org</strong> and <strong>@trustroots.org</strong> identities.</p>
+          <p class="field-help">Local accounts require <strong>@hitchwiki.org</strong> or <strong>@trustroots.org</strong>.</p>
         </form>
 
         <div class="or"><span>then prove you control it</span></div>
@@ -77,15 +77,11 @@
         <div id="result" class="result" hidden>
           <p class="result-label">Your Hitchhiking Matrix ID</p>
           <code id="matrix-id"></code>
-          <p class="result-copy">Your browser has signed a one-time login challenge. The final Matrix session will be issued by the chat service.</p>
+          <p class="result-copy">Your signed login is ready for the chat service.</p>
         </div>
       </section>
 
-      <aside class="notes" aria-label="How it works">
-        <div><strong>One identity</strong><span>Your verified NIP-05 name becomes your Matrix name; the Nostr public key remains the secure account link.</span></div>
-        <div><strong>Already use Matrix?</strong><span>Create or use an account at <a href="https://matrix.org/">matrix.org</a> or any other Matrix server, then join public Hitchhiking rooms from your usual client. This page only creates and signs in to local Nostr-based accounts. <a href="/chat/about/">How it will work →</a></span></div>
-        <div><strong>You hold the key</strong><span>Protect your Nostr recovery phrase. Losing the key means losing proof of this account.</span></div>
-      </aside>
+      <p class="about-link">Already use Matrix? Use your existing account to join public rooms. <a href="/chat/about/">About Hitchhiking chat →</a></p>
     </main>
 
     <dialog id="remote-signer-dialog" aria-labelledby="remote-signer-title">
