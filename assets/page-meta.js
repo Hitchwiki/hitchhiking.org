@@ -1,8 +1,11 @@
-fetch('site-meta.json')
+const pageDate = document.getElementById('page-date');
+const commitDate = document.getElementById('commit-date');
+
+if (pageDate && commitDate) fetch('/site-meta.json')
   .then((response) => response.ok ? response.json() : Promise.reject())
   .then((meta) => {
     const format = (value) => new Date(value).toISOString().slice(0, 16).replace('T', ' ');
-    document.getElementById('page-date').textContent = format(meta.deployedAt);
-    document.getElementById('commit-date').textContent = format(meta.commitAt);
+    pageDate.textContent = format(meta.deployedAt);
+    commitDate.textContent = format(meta.commitAt);
   })
   .catch(() => {});
