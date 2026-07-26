@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7df79" />
+    <meta name="description" content="How Hitchhiking chat will use Matrix federation and Nostr identity." />
+    <title>About Hitchhiking chat</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="/chat/chat.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Hitchhiking.org home"><img src="/thumbsup-hitchhiking.jpg" alt="" /><span>hitchhiking.org</span></a>
+      <nav class="header-nav" aria-label="Site links"><a href="https://hitchwiki.org/">Hitchwiki</a><a href="/chat/">Chat</a><a href="https://forum.hitchhiking.org/">Forum</a><a href="https://github.com/Hitchwiki/hitchhiking.org/issues">Ideas</a></nav>
+    </header>
+
+    <main class="docs-page">
+      <p class="eyebrow">Hitchhiking chat</p>
+      <h1>One community room, open to the Matrix network.</h1>
+      <p class="lede">This is the planned model for Hitchhiking chat. The Matrix homeserver and Nostr sign-in flow are still being prepared.</p>
+
+      <section>
+        <h2>The official room</h2>
+        <p>The main community room will be hosted by Hitchhiking, with an address like <code>#hitchhiking:hitchhiking.org</code>. Hitchhiking controls the local accounts, moderation policy and room administration.</p>
+      </section>
+
+      <section>
+        <h2>Federation, not a separate chat</h2>
+        <p>Matrix is federated. Someone with <code>@alex:matrix.org</code>, or an account on any other compatible homeserver, can join the same official room. Their homeserver and the Hitchhiking homeserver synchronise that one room; no Hitchhiking account or Nostr identity is required.</p>
+        <p>This means the official room does not need a duplicate on <code>matrix.org</code> just to include matrix.org users.</p>
+      </section>
+
+      <section>
+        <h2>What the Nostr sign-in is for</h2>
+        <p><a href="/chat/">Chat sign-in</a> is only for creating and using local Hitchhiking accounts, such as <code>@tom:hitchhiking.org</code>. It will require a signed Nostr identity with a verified NIP-05 address at Hitchwiki or Trustroots.</p>
+        <p>If you prefer email and password, create an account at <a href="https://matrix.org/">matrix.org</a> or another Matrix homeserver, then join the public Hitchhiking room with your usual Matrix client.</p>
+      </section>
+
+      <section>
+        <h2>Moving from the existing matrix.org room</h2>
+        <p>A Matrix room cannot simply move to another homeserver: its room ID and origin remain associated with the server where it was created. The intended transition is to create the Hitchhiking-hosted room, add moderators and rules, then pin a clear link in the existing room and eventually leave it as a read-only archive.</p>
+        <p>A bridge can mirror messages between two separate rooms, but this is an exception rather than the default. It complicates moderation and can create duplicate messages, loops and incomplete reactions or threads.</p>
+      </section>
+
+      <section>
+        <h2>Privacy and responsibility</h2>
+        <p>Federation means participating homeservers keep a copy of events for their users in a room. The Hitchhiking homeserver can apply its own policies to local accounts and rooms it administers, but cannot control other homeservers or their users. Private keys stay with the Nostr signer; the planned sign-in service will not store them.</p>
+      </section>
+
+      <p class="docs-back"><a href="/chat/">← Back to chat sign-in</a></p>
+    </main>
+  </body>
+</html>
