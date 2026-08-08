@@ -43,7 +43,7 @@ var map_da6f08a7ea3dfbd2e40b939b8038c9af = L.map(
   "maxZoom": 20,
   "maxNativeZoom": 20,
   "noWrap": true,
-  "attribution": "\u0026copy;\u003cbr\u003eMade by \u003ca href=\u0027https://tillwenke.github.io/\u0027\u003eTill Wenke\u003c/a\u003e\u003cbr\u003eCode on \u003ca href=\u0027https://github.com/Hitchwiki/hitchhiking.org/blob/main/heatmap.py\u0027\u003eGitHub\u003c/a\u003e",
+  "attribution": "\u0026copy;\u003cbr\u003eMade by \u003ca href=\u0027https://tillwenke.github.io/\u0027\u003eTill Wenke\u003c/a\u003e",
   "subdomains": "abcd",
   "detectRetina": false,
   "tms": false,

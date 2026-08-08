@@ -510,6 +510,42 @@ footer {
   font-size: 0.84rem !important;
 }
 
+.home-footer {
+  display: block;
+  justify-content: center;
+  padding: 1.25rem 0 0 !important;
+  text-align: center;
+}
+
+.home-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem 2rem;
+}
+
+.home-footer a {
+  text-decoration: none;
+}
+
+.home-footer a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.home-footer .footer-build {
+  display: block;
+  margin-top: 0.7rem;
+  color: #7d8c86;
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.footer-build .commit-link {
+  margin-left: 0.7rem;
+  vertical-align: middle;
+}
+
 .footer-meta,
 .footer-links {
   display: flex;
@@ -629,5 +665,9 @@ footer {
     align-items: flex-start;
     flex-direction: column;
     width: 100% !important;
+  }
+
+  .home-footer {
+    align-items: center;
   }
 }

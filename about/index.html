@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7df79" />
+    <meta name="description" content="About hitchhiking.org and its community chat." />
+    <link rel="canonical" href="https://hitchhiking.org/about/" />
+    <title>About hitchhiking.org</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="/chat/chat.css?v=20260808-8" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Hitchhiking.org home"><img src="/thumbsup-hitchhiking.jpg" alt="" /><span>hitchhiking.org</span></a>
+      <nav class="header-nav" aria-label="Site links"><a href="https://hitchwiki.org/">Hitchwiki</a><a href="/chat/">Chat</a><a href="/about/">About</a></nav><button class="identity-pill" id="nostr-identity" type="button" data-state="missing" aria-haspopup="dialog" aria-controls="nostr-info" title="Learn about Nostr, NIP-07 and your community identity">Nostr: checking…</button>
+    </header>
+    <dialog class="nostr-modal" id="nostr-info" aria-labelledby="nostr-title"><form method="dialog"><button class="close" type="submit" aria-label="Close">×</button></form><p class="eyebrow">Nostr on the road</p><h2 id="nostr-title">Your identity, wherever you travel.</h2><p>Nostr is an open protocol for carrying your identity and social connections between independent apps.</p><p><strong>NIP-07</strong> lets a browser extension hold your keys and approve signatures, so this page never needs your private key.</p><div class="nostr-actions"><a href="https://nos.trustroots.org/">Explore Nostr on Trustroots</a></div></dialog>
+
+    <main class="docs-page">
+      <p class="eyebrow">hitchhiking.org</p>
+      <h1>Community tools for life on the road.</h1>
+      <p class="lede">We are hitchhiking geeks building moneyless, free and open-source projects that help people share knowledge and meet in real life.</p>
+
+      <section>
+        <h2>Chat</h2>
+        <p><a href="/chat/">Hitchat</a> connects the Hitchhiking community across Matrix and Signal. Hitchwiki and Trustroots members can read recent messages directly on this site.</p>
+        <p>The room is <a href="https://matrix.to/#/#hitchat:hitchhiking.org"><code>#hitchat:hitchhiking.org</code></a>. It is managed by the hitchhiking.org team and bridged two ways with the community Signal group using the <a href="https://github.com/mautrix/signal">mautrix-signal project</a>.</p>
+      </section>
+
+      <section>
+        <h2>Signal, Matrix and Nostr(oots)</h2>
+        <div class="comparison-wrap">
+          <table class="comparison">
+            <thead><tr><th scope="col">Signal</th><th scope="col">Matrix</th><th scope="col">Nostr(oots)</th></tr></thead>
+            <tbody>
+              <tr><td>Community group</td><td>Federated room</td><td>Hitchwiki or Trustroots identity</td></tr>
+              <tr><td>Messages bridge both ways with Matrix</td><td>Messages bridge both ways with Signal</td><td>Does not carry room messages</td></tr>
+              <tr><td>Use the Signal app</td><td>Use any compatible Matrix client</td><td>Use a browser NIP-07 signer with a valid <code>@hitchwiki.org</code> or <code>@trustroots.org</code> NIP-05</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Meta</h2>
+        <p><a href="https://matrix.to/#/#meta:hitchhiking.org"><code>#meta:hitchhiking.org</code></a> is a place to discuss technical and other community issues that are not directly about hitching and low-budget travel.</p>
+      </section>
+
+      <section>
+        <h2>Federation, not a separate chat</h2>
+        <p>Someone with <code>@alex:matrix.org</code>, or an account on any other compatible homeserver, can join the same room. Participating Matrix servers synchronise that room; no Hitchhiking account or Nostr identity is required for direct Matrix access.</p>
+        <p>The room does not need a duplicate on <code>matrix.org</code> just to include matrix.org users.</p>
+      </section>
+
+      <section>
+        <h2>What the Nostr check does</h2>
+        <p><a href="/chat/">The web chat page</a> automatically uses a browser NIP-07 signer and verifies that its key currently matches an <code>@hitchwiki.org</code> or <code>@trustroots.org</code> NIP-05 identity. After a private one-time authorization, the page shows recent room messages.</p>
+        <p>The check controls the on-site timeline only. It does not make the Matrix room private and does not create a Matrix account.</p>
+      </section>
+
+      <section>
+        <h2>How messages reach the page</h2>
+        <p>The browser never receives Matrix credentials. After NIP-05 verification, a same-origin backend uses a non-admin Matrix reader account joined only to Hitchat. It returns a bounded recent timeline containing plain text, notices and emotes.</p>
+        <p>Membership changes, encrypted events, media, edits, redactions and formatted HTML are not rendered on the page. To participate or see the complete room, open it in a Matrix client or use the Signal group.</p>
+      </section>
+
+      <section>
+        <h2>Privacy and responsibility</h2>
+        <p>Participating homeservers keep a copy of events for their users in a room. The hitchhiking.org team can apply its own policies to accounts and rooms it administers, but cannot control other homeservers or their users. Nostr private keys stay with the signer and Matrix credentials stay on the server.</p>
+      </section>
+
+      <section id="rights">
+        <h2>Free software, rights and attribution</h2>
+        <p>The original hitchhiking.org software is free software, licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License, version 3 or later</a>: <span>(c) 2025–2026 guaka and till</span>. The source release is prepared for <a href="https://github.com/hitchwiki/hitchhiking.org">github.com/hitchwiki/hitchhiking.org</a>.</p>
+        <p>The background photograph, <a href="https://commons.wikimedia.org/wiki/File:Hitchhiker-Luxemburg-1977.jpg"><cite>Hitchhiker in Luxembourg, 1977</cite></a>, is by Roger McLassus and is used under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>. The map credits <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, <a href="https://carto.com/attributions/">CARTO</a>, and the waiting-time visualization by <a href="https://tillwenke.github.io/">Till Wenke</a>.</p>
+        <p>Hitchwiki-family artwork is project-controlled and included with the source release. Project names and logos can also be trademarks and may not be used to imply endorsement. Signal and the Signal logo are trademarks of Signal Technology Foundation; <a href="https://signal.org/brand/trademarks/">Signal's trademark notice</a> applies. No Signal endorsement is implied.</p>
+      </section>
+    </main>
+    <footer class="chat-footer"><nav aria-label="About links"><a href="/">home</a><a href="/chat/">chat</a><a href="https://matrix.to/#/#hitchat:hitchhiking.org">#hitchat:hitchhiking.org</a></nav><span class="footer-build"><time datetime="2026-08-08T14:45:00+01:00">2026-08-08 14:45</time> <a class="commit-link" href="https://github.com/Hitchwiki/hitchhiking.org" aria-label="hitchhiking.org source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.29c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a></span></footer>
+    <script src="/assets/nostr-identity.js?v=20260808-5"></script>
+  </body>
+</html>

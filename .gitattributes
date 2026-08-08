@@ -1,0 +1,8 @@
+/.codex export-ignore
+/.env export-ignore
+/.env.* export-ignore
+/.venv export-ignore
+/coverage export-ignore
+/dist export-ignore
+/node_modules export-ignore
+/release export-ignore

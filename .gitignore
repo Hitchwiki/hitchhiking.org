@@ -1,2 +1,10 @@
 .venv/
 node_modules/
+.codex/
+.env
+.env.*
+!.env.example
+coverage/
+dist/
+release/
+*.tar.gz

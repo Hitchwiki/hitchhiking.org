@@ -33,7 +33,7 @@ folium_map = folium.Map(
 folium.TileLayer(
     tiles=tiles,
     name="Map",
-    attr="&copy;<br>Made by <a href='https://tillwenke.github.io/'>Till Wenke</a><br>Code on <a href='https://github.com/Hitchwiki/hitchhiking.org/blob/main/heatmap.py'>GitHub</a>",
+    attr="&copy;<br>Made by <a href='https://tillwenke.github.io/'>Till Wenke</a>",
     no_wrap=True,
 ).add_to(folium_map)
 

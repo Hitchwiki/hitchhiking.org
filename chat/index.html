@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="compact-ui">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f7df79" />
-    <meta name="description" content="Passwordless Matrix sign-in for the Hitchhiking community." />
+    <meta name="description" content="Hitchwiki and Trustroots member access to the Hitchhiking Matrix chat." />
     <title>Hitchhiking chat</title>
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="stylesheet" href="/chat/chat.css?v=20260726-2" />
+    <link rel="stylesheet" href="/chat/chat.css?v=20260808-13" />
   </head>
-  <body>
+  <body class="chat-page">
     <header class="site-header">
       <a class="brand" href="/" aria-label="Hitchhiking.org home">
         <img src="/thumbsup-hitchhiking.jpg" alt="" />
@@ -18,8 +18,7 @@
       <nav class="header-nav" aria-label="Site links">
         <a href="https://hitchwiki.org/">Hitchwiki</a>
         <a href="/chat/">Chat</a>
-        <a href="https://forum.hitchhiking.org/">Forum</a>
-        <a href="https://github.com/Hitchwiki/hitchhiking.org/issues">Ideas</a>
+        <a href="/about/">About</a>
       </nav>
       <button class="identity-pill" id="nostr-identity" type="button" data-state="missing" aria-haspopup="dialog" aria-controls="nostr-info" title="Check your NIP-07 signer and NIP-05 identity">Nostr: checking…</button>
     </header>
@@ -28,72 +27,54 @@
       <button class="close" type="button" data-close-nostr-dialog aria-label="Close">×</button>
       <p class="eyebrow">Nostr on the road</p>
       <h2 id="nostr-title">Your identity, wherever you travel.</h2>
-      <p>When a NIP-07 signer is available, this page automatically checks whether its public key has a valid Hitchwiki or Trustroots NIP-05 identity.</p>
-      <button id="nostr-retry" class="primary" type="button">Check my signer again</button>
+      <p>When a NIP-07 signer is available, this page checks whether its public key has a valid Hitchwiki or Trustroots NIP-05 identity.</p>
     </dialog>
 
-    <main>
-      <section class="hero" aria-labelledby="page-title">
-        <p class="eyebrow">Hitchhiking chat</p>
-        <h1 id="page-title">Sign in with Nostr.</h1>
-        <p class="lede">For verified Hitchwiki and Trustroots identities.</p>
-      </section>
+    <div class="chat-shell">
+      <aside class="chat-sidebar" aria-label="Chats">
+        <label class="chat-search"><span class="visually-hidden">Search chats</span><input id="chat-filter" type="search" placeholder="Search chats" autocomplete="off" /></label>
+        <nav class="room-list" aria-label="Rooms">
+          <a class="room-item selected" data-room="hitchat" href="/chat/#hitchat" aria-current="page"><span class="room-avatar" aria-hidden="true">H</span><span>#hitchat</span></a>
+          <a class="room-item" data-room="meta" href="/chat/#meta"><span class="room-avatar meta-avatar" aria-hidden="true">M</span><span>#meta</span></a>
+          <a class="room-item" data-room="test" href="/chat/#test"><span class="room-avatar test-avatar" aria-hidden="true">T</span><span>#test</span></a>
+        </nav>
+        <span class="sidebar-build"><time datetime="2026-08-08T14:45:00+01:00">2026-08-08 14:45</time> <a class="commit-link" href="https://github.com/Hitchwiki/hitchhiking.org" aria-label="hitchhiking.org source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.29c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a></span>
+      </aside>
 
+    <main>
       <section class="sign-in-card" aria-labelledby="sign-in-title">
         <div class="card-heading">
           <div class="badge" aria-hidden="true">✦</div>
-          <div>
-            <p class="step">Step 1 of 2</p>
-            <h2 id="sign-in-title">Verify your Nostr identity</h2>
-          </div>
+          <div><p class="step">Community access</p><h2 id="sign-in-title">Continue with Nostr</h2></div>
         </div>
 
-        <form id="identity-form" novalidate>
-          <label for="nip05">Your NIP-05 address</label>
-          <div class="input-row">
-            <input id="nip05" name="nip05" type="text" inputmode="email" autocomplete="username" placeholder="you@trustroots.org" spellcheck="false" required />
-            <button class="primary" type="submit">Continue</button>
-          </div>
-          <p class="field-help">Local accounts require <strong>@hitchwiki.org</strong> or <strong>@trustroots.org</strong>.</p>
-        </form>
+        <p class="field-help">We’ll use your browser’s Nostr signer and verify its <strong>@hitchwiki.org</strong> or <strong>@trustroots.org</strong> identity. No private key leaves your signer.</p>
+        <p id="status" class="status" role="status" aria-live="polite">Checking for your Nostr signer…</p>
+        <p class="setup-link">Need a signer or NIP-05 identity? <a href="https://nos.trustroots.org/">Set it up at nos.trustroots.org</a></p>
 
-        <div class="or"><span>then prove you control it</span></div>
-
-        <div class="signer-options">
-          <button id="nip07" class="signer-button" type="button">
-            <span class="signer-icon">⌁</span>
-            <span><strong>Use browser signer</strong><small>NIP-07 extension</small></span>
-            <span class="arrow" aria-hidden="true">→</span>
-          </button>
-          <button id="nip46" class="signer-button" type="button">
-            <span class="signer-icon">↗</span>
-            <span><strong>Use remote signer</strong><small>NIP-46 · Nostroots and compatible apps</small></span>
-            <span class="arrow" aria-hidden="true">→</span>
-          </button>
-        </div>
-
-        <p id="status" class="status" role="status" aria-live="polite">Enter your NIP-05 address to begin.</p>
-
-        <div id="result" class="result" hidden>
-          <p class="result-label">Your Hitchhiking Matrix ID</p>
-          <code id="matrix-id"></code>
-          <p class="result-copy">Your signed login is ready for the chat service.</p>
-        </div>
       </section>
 
-      <p class="about-link">Already use Matrix? Use your existing account to join public rooms. <a href="/chat/about/">About Hitchhiking chat →</a></p>
+      <section id="result" class="room-card" aria-labelledby="room-title" hidden>
+        <h2 id="room-title">#hitchat:hitchhiking.org</h2>
+        <p id="room-description">Signal and Matrix meet in one two-way community room.</p>
+        <div class="timeline-heading">
+          <h3>Recent messages</h3>
+          <button id="timeline-retry" type="button" hidden>Try again</button>
+        </div>
+        <p id="timeline-status" class="timeline-status" role="status" aria-live="polite">Loading recent messages…</p>
+        <ol id="timeline" class="timeline" aria-label="Recent Hitchat messages"></ol>
+        <form id="chat-composer" class="chat-composer" aria-label="Message composer">
+          <textarea id="message-input" rows="1" maxlength="4000" placeholder="Type a message…" readonly aria-label="Message input"></textarea>
+          <label class="composer-expiry"><span>expiry</span><select disabled aria-label="Message expiry"><option>7d</option></select></label>
+          <button id="message-send" class="composer-send" type="submit" disabled>send</button>
+          <span id="composer-status">read-only</span>
+        </form>
+      </section>
+
     </main>
+    </div>
 
-    <dialog id="remote-signer-dialog" aria-labelledby="remote-signer-title">
-      <button class="close" type="button" data-close-dialog aria-label="Close">×</button>
-      <p class="eyebrow">NIP-46</p>
-      <h2 id="remote-signer-title">Connect a remote signer</h2>
-      <p>Remote-signing support needs a small sign-in service to create a one-time Nostr Connect request. It will work with compatible signers without exposing your private key to this page.</p>
-      <p class="dialog-note">For now, use a NIP-07 browser signer to test the identity check.</p>
-    </dialog>
-
-    <footer><div class="footer-meta"><span>Page: <time id="page-date">—</time></span><a class="commit-link" href="https://github.com/Hitchwiki/hitchhiking.org/commits/main" aria-label="View the latest commits on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.23.48-2.7-.95-2.7-.95-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.89.88 2.35.67.07-.52.28-.88.51-1.08-1.78-.2-3.65-.89-3.65-3.96 0-.87.31-1.58.82-2.14-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.8c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.14 0 3.08-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span>Last commit: <time id="commit-date">—</time></span></a><a class="license-badge" href="https://creativecommons.org/licenses/by-sa/4.0/" aria-label="Content licensed under Creative Commons Attribution-ShareAlike 4.0"><img src="/assets/cc-by-sa.png" alt="CC BY-SA 4.0" /></a></div></footer>
-    <script type="module" src="/chat/chat.js"></script>
-    <script src="/assets/page-meta.js"></script>
+    <script src="/assets/nostr-identity.js?v=20260808-5"></script>
+    <script type="module" src="/chat/chat.js?v=20260808-13"></script>
   </body>
 </html>
