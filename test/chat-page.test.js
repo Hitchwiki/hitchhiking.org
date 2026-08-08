@@ -10,6 +10,7 @@ const aboutPage = readFileSync(new URL('../about/index.html', import.meta.url), 
 describe('authenticated Hitchat timeline', () => {
   it('uses the compact landing-page scale', () => {
     expect(page).toContain('<html lang="en" class="compact-ui">');
+    expect(aboutPage).toContain('<html lang="en" class="compact-ui">');
   });
 
   it('keeps the timeline inside the initially hidden authenticated room card', () => {
