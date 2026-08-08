@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 const page = readFileSync(new URL('../chat/index.html', import.meta.url), 'utf8');
 const script = readFileSync(new URL('../chat/chat.js', import.meta.url), 'utf8');
 const sharedIdentity = readFileSync(new URL('../assets/nostr-identity.js', import.meta.url), 'utf8');
+const landingPage = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const aboutPage = readFileSync(new URL('../about/index.html', import.meta.url), 'utf8');
 
 describe('authenticated Hitchat timeline', () => {
   it('uses the compact landing-page scale', () => {
@@ -38,6 +40,16 @@ describe('authenticated Hitchat timeline', () => {
     expect(page).not.toContain('id="nip07"');
     expect(page).not.toContain('nip46');
     expect(page).not.toContain('NIP-46');
+  });
+
+  it('never renders raw hexadecimal signer keys', () => {
+    expect(sharedIdentity).toContain("import { hexToNpub } from './nostr-key.js'");
+    expect(sharedIdentity).toContain('`Nostr: ${hexToNpub(pubkey)}`');
+    expect(sharedIdentity).not.toContain('pubkey.slice(');
+    for (const html of [landingPage, aboutPage, page]) {
+      expect(html).toContain('type="module"');
+      expect(html).toContain('nostr-identity.js?v=20260808-6');
+    }
   });
 
   it('keeps a verified Nostr identity when chat authorization fails later', () => {

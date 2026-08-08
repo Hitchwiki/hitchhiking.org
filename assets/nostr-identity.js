@@ -1,3 +1,5 @@
+import { hexToNpub } from './nostr-key.js';
+
 (() => {
   const status = document.getElementById('nostr-identity');
   if (!status) return;
@@ -30,7 +32,7 @@
     try {
       const pubkey = String(await window.nostr.getPublicKey()).toLowerCase();
       const handle = await lookup(pubkey);
-      setStatus(handle ? handle : `Nostr: ${pubkey.slice(0, 8)}…`, handle ? 'connected' : 'unlinked');
+      setStatus(handle ? handle : `Nostr: ${hexToNpub(pubkey)}`, handle ? 'connected' : 'unlinked');
       window.hitchhikingNostrIdentity = { pubkey, nip05: handle };
       window.dispatchEvent(new CustomEvent('hitchhiking:nostr-identity', { detail: window.hitchhikingNostrIdentity }));
     } catch (_) {
