@@ -3,56 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f7df79" />
-    <meta name="description" content="How Hitchhiking chat will use Matrix federation and Nostr identity." />
-    <title>About Hitchhiking chat</title>
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="stylesheet" href="/chat/chat.css?v=20260726-2" />
+    <meta http-equiv="refresh" content="0; url=/about/" />
+    <link rel="canonical" href="https://hitchhiking.org/about/" />
+    <title>About hitchhiking.org</title>
   </head>
-  <body>
-    <header class="site-header">
-      <a class="brand" href="/" aria-label="Hitchhiking.org home"><img src="/thumbsup-hitchhiking.jpg" alt="" /><span>hitchhiking.org</span></a>
-      <nav class="header-nav" aria-label="Site links"><a href="https://hitchwiki.org/">Hitchwiki</a><a href="/chat/">Chat</a><a href="https://forum.hitchhiking.org/">Forum</a><a href="https://github.com/Hitchwiki/hitchhiking.org/issues">Ideas</a></nav><button class="identity-pill" id="nostr-identity" type="button" data-state="missing" aria-haspopup="dialog" aria-controls="nostr-info" title="Learn about Nostr, NIP-07 and your Trustroots identity">Nostr: checking…</button>
-    </header>
-    <dialog class="nostr-modal" id="nostr-info" aria-labelledby="nostr-title"><form method="dialog"><button class="close" type="submit" aria-label="Close">×</button></form><p class="eyebrow">Nostr on the road</p><h2 id="nostr-title">Your identity, wherever you travel.</h2><p>Nostr is an open protocol for carrying your identity and social connections between independent apps.</p><p><strong>NIP-07</strong> lets a browser extension hold your keys and approve signatures, so this page never needs your private key.</p><div class="nostr-actions"><a href="https://nos.trustroots.org/">Explore Nostr on Trustroots ↗</a><button id="nostr-retry" type="button">Check my NIP-07 signer</button></div></dialog>
-
-    <main class="docs-page">
-      <p class="eyebrow">Hitchhiking chat</p>
-      <h1>One community room, open to the Matrix network.</h1>
-      <p class="lede">This is the planned model for Hitchhiking chat. The Matrix homeserver and Nostr sign-in flow are still being prepared.</p>
-
-      <section>
-        <h2>The official room</h2>
-        <p>The main community room will be hosted by Hitchhiking, with an address like <code>#hitchhiking:hitchhiking.org</code>. Hitchhiking controls the local accounts, moderation policy and room administration.</p>
-      </section>
-
-      <section>
-        <h2>Federation, not a separate chat</h2>
-        <p>Matrix is federated. Someone with <code>@alex:matrix.org</code>, or an account on any other compatible homeserver, can join the same official room. Their homeserver and the Hitchhiking homeserver synchronise that one room; no Hitchhiking account or Nostr identity is required.</p>
-        <p>This means the official room does not need a duplicate on <code>matrix.org</code> just to include matrix.org users.</p>
-      </section>
-
-      <section>
-        <h2>What the Nostr sign-in is for</h2>
-        <p><a href="/chat/">Chat sign-in</a> is only for creating and using local Hitchhiking accounts, such as <code>@tom:hitchhiking.org</code>. It will require a signed Nostr identity with a verified NIP-05 address at Hitchwiki or Trustroots.</p>
-        <p>If you prefer email and password, create an account at <a href="https://matrix.org/">matrix.org</a> or another Matrix homeserver, then join the public Hitchhiking room with your usual Matrix client.</p>
-      </section>
-
-      <section>
-        <h2>Moving from the existing matrix.org room</h2>
-        <p>A Matrix room cannot simply move to another homeserver: its room ID and origin remain associated with the server where it was created. The intended transition is to create the Hitchhiking-hosted room, add moderators and rules, then pin a clear link in the existing room and eventually leave it as a read-only archive.</p>
-        <p>A bridge can mirror messages between two separate rooms, but this is an exception rather than the default. It complicates moderation and can create duplicate messages, loops and incomplete reactions or threads.</p>
-      </section>
-
-      <section>
-        <h2>Privacy and responsibility</h2>
-        <p>Federation means participating homeservers keep a copy of events for their users in a room. The Hitchhiking homeserver can apply its own policies to local accounts and rooms it administers, but cannot control other homeservers or their users. Private keys stay with the Nostr signer; the planned sign-in service will not store them.</p>
-      </section>
-
-      <p class="docs-back"><a href="/chat/">← Back to chat sign-in</a></p>
-    </main>
-    <footer><div class="footer-meta"><span>Page: <time id="page-date">—</time></span><a class="commit-link" href="https://github.com/Hitchwiki/hitchhiking.org/commits/main" aria-label="View the latest commits on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.23.48-2.7-.95-2.7-.95-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.89.88 2.35.67.07-.52.28-.88.51-1.08-1.78-.2-3.65-.89-3.65-3.96 0-.87.31-1.58.82-2.14-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.8c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.14 0 3.08-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span>Last commit: <time id="commit-date">—</time></span></a><a class="license-badge" href="https://creativecommons.org/licenses/by-sa/4.0/" aria-label="Content licensed under Creative Commons Attribution-ShareAlike 4.0"><img src="/assets/cc-by-sa.png" alt="CC BY-SA 4.0" /></a></div></footer>
-    <script src="/assets/nostr-identity.js"></script>
-    <script src="/assets/page-meta.js"></script>
-  </body>
+  <body><p><a href="/about/">Continue to the about page</a></p></body>
 </html>

@@ -7,7 +7,7 @@
   const trustrootsHandle = (event) => {
     try {
       const nip05 = JSON.parse(event.content || '{}').nip05 || '';
-      if (/^[a-z0-9_.-]+@trustroots\.org$/i.test(nip05)) return nip05.toLowerCase();
+      if (/^[a-z0-9_.-]+@(trustroots|hitchwiki)\.org$/i.test(nip05)) return nip05.toLowerCase();
     } catch (_) {}
     const tag = (event.tags || []).find((item) => item[0] === 'trustroots' || (item[0] === 'l' && item[2] === 'org.trustroots:username'));
     return tag?.[1] && /^[a-z0-9_.-]+$/i.test(tag[1]) ? `${tag[1].toLowerCase()}@trustroots.org` : '';
@@ -31,6 +31,8 @@
       const pubkey = String(await window.nostr.getPublicKey()).toLowerCase();
       const handle = await lookup(pubkey);
       setStatus(handle ? handle : `Nostr: ${pubkey.slice(0, 8)}…`, handle ? 'connected' : 'unlinked');
+      window.hitchhikingNostrIdentity = { pubkey, nip05: handle };
+      window.dispatchEvent(new CustomEvent('hitchhiking:nostr-identity', { detail: window.hitchhikingNostrIdentity }));
     } catch (_) {
       setStatus('Nostr: signer detected — click to connect', 'unlinked');
     } finally {

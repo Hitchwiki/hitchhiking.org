@@ -25,6 +25,7 @@
     <meta name="twitter:description" content="Free, community-run maps, practical knowledge, forums, chats, archives and tools for hitchhikers." />
     <meta name="twitter:image" content="https://hitchhiking.org/assets/hitchhiker-luxemburg-1977.jpg" />
     <meta name="twitter:image:alt" content="A hitchhiker waiting beside a country road in Luxembourg in 1977" />
+    <script defer src="https://1p.hitchhiking.org/script.js" data-website-id="166e3735-3228-4608-b43a-92761a55499e"></script>
     <style>
       *,
       *:after,
@@ -112,21 +113,21 @@
       .site-header { width:100%; min-height:5.75rem; margin:0; padding:0 2.5rem; background:#f7df79; box-shadow:inset 0 -1px rgba(185,104,0,.24); } .site-header .brand,.site-header .header-nav a { color:#6e3100; } .site-header .brand-logo { border-radius:.65rem; object-fit:cover; filter:drop-shadow(0 1px 0 rgba(0,0,0,.15)); } .site-header .header-nav { margin-left:auto; } .identity-pill { border:1px solid rgba(110,49,0,.25); border-radius:.7rem; padding:.55rem .85rem; color:#6e3100; background:rgba(255,255,255,.32); font:inherit; font-weight:700; cursor:pointer; } .identity-pill[data-state="connected"] { background:rgba(255,253,247,.58); border-color:rgba(110,49,0,.32); color:#6e3100; } .identity-pill[data-state="pending"] { opacity:.8; } .footer-meta { display:flex; flex-wrap:wrap; align-items:center; gap:.8rem; } .github-link { display:inline-flex; color:var(--ink); } .github-link svg { width:1.25rem; height:1.25rem; } .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
       @media (max-width:900px) { .layout { grid-template-columns:1fr; } .map { position:relative; top:auto; height:58vh; } } @media (max-width:580px) { header,footer { width:min(100% - 2rem,1440px); } .header-nav { display:none; } .projects,.heritage { grid-template-columns:1fr; } main { padding:2.5rem 1rem; } .heritage img { max-height:18rem; } footer { align-items:flex-start; flex-direction:column; } }
     </style>
-    <link rel="stylesheet" href="assets/site.css?v=20260726-11" />
+    <link rel="stylesheet" href="assets/site.css?v=20260808-12" />
   </head>
 
   <body>
     <header class="site-header">
       <a class="brand" href="/"><img class="brand-logo" src="thumbsup-hitchhiking.jpg" alt="Hitchhiker giving a thumbs up" />hitchhiking.org</a>
-      <nav class="header-nav" aria-label="Site links"><a href="https://hitchwiki.org/">Hitchwiki</a><a href="/chat/">Chat</a><a href="https://forum.hitchhiking.org/">Forum</a><a href="https://github.com/Hitchwiki/hitchhiking.org/issues">Ideas</a></nav><button class="identity-pill" id="nostr-identity" type="button" data-state="missing" aria-haspopup="dialog" aria-controls="nostr-info" title="Learn about Nostr, NIP-07 and your Trustroots identity">Nostr: checking…</button>
+      <nav class="header-nav" aria-label="Site links"><a href="https://hitchwiki.org/">Hitchwiki</a><a href="/chat/">Chat</a><a href="/about/">About</a></nav><button class="identity-pill" id="nostr-identity" type="button" data-state="missing" aria-haspopup="dialog" aria-controls="nostr-info" title="Learn about Nostr, NIP-07 and your community identity">Nostr: checking…</button>
     </header>
     <dialog class="nostr-modal" id="nostr-info" aria-labelledby="nostr-title">
       <form method="dialog"><button class="nostr-close" type="submit" aria-label="Close Nostr information">×</button></form>
       <p class="nostr-kicker">Nostr on the road</p>
       <h2 id="nostr-title">Your identity, wherever you travel.</h2>
       <p>Nostr is an open protocol for carrying your identity and social connections between independent apps.</p>
-      <p><strong>NIP-07</strong> lets a browser extension hold your keys and approve signatures, so this page never needs your private key. We use it to detect your public identity and check whether it has a verified <strong>Trustroots NIP-05</strong> address.</p>
-      <div class="nostr-actions"><a href="https://nos.trustroots.org/">Explore Nostr on Trustroots ↗</a><button id="nostr-retry" type="button">Check my NIP-07 signer</button></div>
+      <p><strong>NIP-07</strong> lets a browser extension hold your keys and approve signatures, so this page never needs your private key. We use it to detect your public identity and check whether it has a verified <strong>Hitchwiki or Trustroots NIP-05</strong> address.</p>
+      <div class="nostr-actions"><a href="https://nos.trustroots.org/">Explore Nostr on Trustroots</a></div>
     </dialog>
     <div class="layout">
     <section class="map">
@@ -154,13 +155,9 @@
           <li><span class="project-icon" aria-hidden="true">🚗</span><a href="https://rideshares.org/">Rideshares.org <small class="experimental-label">Experimental</small></a><span>A Nostr-based ridesharing application, launched in 2025.</span></li>
         </ul>
       </section>
-      <ul class="projects ideas-card">
-        <li><span class="project-icon" aria-hidden="true">💡</span><a href="https://github.com/Hitchwiki/hitchhiking.org/issues/new">More ideas are welcome.</a><span>Share an idea for hitchhiking.org.</span></li>
-      </ul>
-      <footer><div class="footer-meta"><span>Page: <time id="page-date">—</time></span><a class="commit-link" href="https://github.com/Hitchwiki/hitchhiking.org/commits/main" aria-label="View the latest commits on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.23.48-2.7-.95-2.7-.95-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.89.88 2.35.67.07-.52.28-.88.51-1.08-1.78-.2-3.65-.89-3.65-3.96 0-.87.31-1.58.82-2.14-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.8c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.14 0 3.08-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg><span>Last commit: <time id="commit-date">—</time></span></a><a class="license-badge" href="https://creativecommons.org/licenses/by-sa/4.0/" aria-label="Content licensed under Creative Commons Attribution-ShareAlike 4.0"><img src="assets/cc-by-sa.png" alt="CC BY-SA 4.0" /></a></div></footer>
+      <footer class="home-footer"><nav aria-label="More links"><a href="/chat/">chat</a><a href="/about/">about</a><a href="https://forum.hitchhiking.org/">forum</a></nav><span class="footer-build"><time datetime="2026-08-08T14:45:00+01:00">2026-08-08 14:45</time> <a class="commit-link" href="https://github.com/Hitchwiki/hitchhiking.org" aria-label="hitchhiking.org source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.29c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a></span></footer>
     </main>
     </div>
-    <script src="assets/nostr-identity.js?v=20260725-2"></script>
-    <script src="assets/page-meta.js?v=20260726-1"></script>
+    <script src="assets/nostr-identity.js?v=20260808-5"></script>
   </body>
 </html>

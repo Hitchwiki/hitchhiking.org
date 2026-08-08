@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "vitest run",
+	"dev": "vite --host 127.0.0.1",
+    "test": "vitest run && bash scripts/check-release.sh",
     "test:watch": "vitest"
   },
   "devDependencies": {
