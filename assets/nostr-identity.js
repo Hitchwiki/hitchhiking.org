@@ -37,6 +37,7 @@ import { hexToNpub } from './nostr-key.js';
       window.dispatchEvent(new CustomEvent('hitchhiking:nostr-identity', { detail: window.hitchhikingNostrIdentity }));
     } catch (_) {
       setStatus('Nostr: signer detected — click to connect', 'unlinked');
+      window.dispatchEvent(new CustomEvent('hitchhiking:nostr-unavailable'));
     } finally {
       connecting = false;
     }
@@ -48,6 +49,7 @@ import { hexToNpub } from './nostr-key.js';
     if (Date.now() - startedAt > 12000) {
       clearInterval(timer);
       setStatus('Nostr: no NIP-07 signer');
+      window.dispatchEvent(new CustomEvent('hitchhiking:nostr-unavailable'));
     } else {
       setStatus('Nostr: waiting for NIP-07…', 'pending');
     }

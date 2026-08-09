@@ -6,6 +6,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   const result = document.querySelector('#result');
   const roomTitle = document.querySelector('#room-title');
   const roomDescription = document.querySelector('#room-description');
+  const roomParticipants = document.querySelector('#room-participants');
   const timeline = document.querySelector('#timeline');
   const timelineStatus = document.querySelector('#timeline-status');
   const timelineRetry = document.querySelector('#timeline-retry');
@@ -15,10 +16,21 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   const composer = document.querySelector('#chat-composer');
   const messageInput = document.querySelector('#message-input');
   const messageSend = document.querySelector('#message-send');
+  const messageExpiry = document.querySelector('#message-expiry option');
   const composerStatus = document.querySelector('#composer-status');
   let verified = null;
   let activeSession = null;
   let activeRoom = 'hitchat';
+  let timelineLoading = false;
+  let timelineRefreshPending = false;
+  let timelineRefreshTimer = null;
+  let renderedRoom = '';
+  let renderedTimelineKey = '';
+  const joinedParticipants = {};
+  const recentRoomMessages = {};
+  const participantRequests = new Set();
+  const timelineRefreshInterval = 5000;
+  const avatarPalette = ['#2f8876', '#3979a8', '#aa6b28', '#7b68ad', '#3f8f54', '#a55772', '#597286', '#8c6c32'];
 
   const rooms = {
     hitchat: { alias: '#hitchat:hitchhiking.org', description: 'Signal and Matrix meet in one two-way community room.' },
@@ -43,13 +55,44 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     roomTitle.textContent = room.alias;
     roomDescription.textContent = room.description;
     const writable = activeRoom === 'test';
+    messageExpiry.textContent = writable ? '24h' : '28d';
     messageInput.readOnly = !writable;
     messageSend.disabled = !writable || messageInput.value.trim() === '';
     composerStatus.textContent = writable ? 'press Enter to send · Shift+Enter for a new line' : 'read-only';
+    if (activeSession && writable) messageInput.focus();
+    roomParticipants.hidden = true;
+    renderParticipantSummary(activeRoom);
   };
 
   const setStatus = (message, type = '') => { status.textContent = message; status.className = `status ${type}`; };
   const setHeaderIdentity = (label, state = 'missing') => { headerIdentity.textContent = label; headerIdentity.dataset.state = state; };
+  const showSignInCard = () => { card.hidden = false; };
+
+  const avatarColorFor = (senderIdentity) => {
+    let hash = 2166136261;
+    for (const character of senderIdentity.trim().toLowerCase()) {
+      hash ^= character.codePointAt(0);
+      hash = Math.imul(hash, 16777619);
+    }
+    return avatarPalette[(hash >>> 0) % avatarPalette.length];
+  };
+
+  const renderParticipantSummary = (room) => {
+    if (room !== activeRoom || !joinedParticipants[room]) return;
+    const recentNip05 = new Set((recentRoomMessages[room] || []).map((message) => message.nip05?.toLowerCase()).filter(Boolean));
+    const counts = [
+      ['Matrix', joinedParticipants[room].matrix],
+      ...(Number.isInteger(joinedParticipants[room].signal) ? [['Signal', joinedParticipants[room].signal]] : []),
+      ['NIP-05', recentNip05.size],
+    ];
+    roomParticipants.replaceChildren(...counts.map(([label, count]) => {
+      const item = document.createElement('span');
+      item.className = 'participant-count';
+      item.textContent = `${label} ${count}`;
+      return item;
+    }));
+    roomParticipants.hidden = false;
+  };
 
   const requestJSON = async (url, options = {}) => {
     const controller = new AbortController();
@@ -72,7 +115,13 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     return data;
   };
 
-  const renderTimeline = (messages) => {
+  const renderTimeline = (messages, room) => {
+    recentRoomMessages[room] = messages;
+    renderParticipantSummary(room);
+    const timelineKey = messages.map((message) => message.event_id).join('\n');
+    if (renderedRoom === room && renderedTimelineKey === timelineKey) return;
+    renderedRoom = room;
+    renderedTimelineKey = timelineKey;
     timeline.replaceChildren();
     for (const message of messages) {
       const item = document.createElement('li');
@@ -81,14 +130,21 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       const avatar = document.createElement('span');
       avatar.className = 'timeline-avatar';
       avatar.setAttribute('aria-hidden', 'true');
-      avatar.textContent = message.sender.replace(/^@/, '').slice(0, 1).toUpperCase() || '?';
+      const senderLabel = message.nip05 || message.sender;
+      avatar.textContent = senderLabel.replace(/^@/, '').slice(0, 1).toUpperCase() || '?';
+      avatar.style.setProperty('--avatar-color', avatarColorFor(senderLabel));
       const bubble = document.createElement('div');
       bubble.className = 'timeline-bubble';
       const meta = document.createElement('div');
       meta.className = 'timeline-meta';
-      const sender = document.createElement('span');
+      const sender = document.createElement(message.profile_url ? 'a' : 'span');
       sender.className = 'timeline-sender';
-      sender.textContent = message.sender;
+      sender.textContent = senderLabel;
+      if (message.profile_url) {
+        sender.href = message.profile_url;
+        sender.rel = 'noopener noreferrer';
+        sender.target = '_blank';
+      }
       const time = document.createElement('time');
       time.className = 'timeline-time';
       time.dateTime = new Date(message.timestamp).toISOString();
@@ -105,28 +161,95 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       copy.addEventListener('click', async () => {
         await navigator.clipboard?.writeText(message.body);
       });
+      const actions = document.createElement('div');
+      actions.className = 'message-actions';
+      actions.append(copy);
+      if (message.nip05 && activeSession?.nip05 === message.nip05) {
+        const remove = document.createElement('button');
+        remove.className = 'message-delete';
+        remove.type = 'button';
+        remove.textContent = 'delete';
+        remove.setAttribute('aria-label', 'Delete your message');
+        remove.addEventListener('click', async () => {
+          if (!window.confirm('Delete this message?')) return;
+          remove.disabled = true;
+          try {
+            await requestJSON('/chat/auth/chat/delete', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ room: 'test', event_id: message.event_id }),
+            });
+            await loadTimeline();
+          } catch (error) {
+            composerStatus.textContent = error.message || 'Message could not be deleted.';
+            remove.disabled = false;
+          }
+        });
+        actions.append(remove);
+      }
       meta.append(sender);
       bubble.append(meta, body, time);
-      item.append(avatar, bubble, copy);
+      item.append(avatar, bubble, actions);
       timeline.append(item);
     }
     timeline.scrollTop = timeline.scrollHeight;
   };
 
-  const loadTimeline = async () => {
-    timelineStatus.textContent = 'Loading recent messages…';
-    timelineStatus.className = 'timeline-status';
-    timelineRetry.hidden = true;
+  const loadParticipants = async (room = activeRoom) => {
+    if (participantRequests.has(room)) return;
+    participantRequests.add(room);
     try {
-      const data = await requestJSON(`/chat/auth/chat/timeline?room=${encodeURIComponent(activeRoom)}`);
-      const messages = Array.isArray(data.messages) ? data.messages : [];
-      renderTimeline(messages);
-      timelineStatus.textContent = messages.length ? '' : 'No recent text messages are available.';
-    } catch (error) {
-      timelineStatus.textContent = error.message || 'Could not load recent messages.';
-      timelineStatus.className = 'timeline-status error';
-      timelineRetry.hidden = false;
+      const data = await requestJSON(`/chat/auth/chat/participants?room=${encodeURIComponent(room)}`);
+      if (data.participants && Number.isInteger(data.participants.matrix)) {
+        joinedParticipants[room] = data.participants;
+        renderParticipantSummary(room);
+      }
+    } catch {
+      // Participant counts are supplementary; timeline errors are handled separately.
+    } finally {
+      participantRequests.delete(room);
     }
+  };
+
+  const loadTimeline = async ({ silent = false } = {}) => {
+    if (timelineLoading) {
+      timelineRefreshPending = true;
+      return;
+    }
+    timelineLoading = true;
+    const requestedRoom = activeRoom;
+    if (!silent) {
+      timelineStatus.textContent = 'Loading messages…';
+      timelineStatus.className = 'timeline-status';
+      timelineRetry.hidden = true;
+    }
+    try {
+      const data = await requestJSON(`/chat/auth/chat/timeline?room=${encodeURIComponent(requestedRoom)}`);
+      if (requestedRoom !== activeRoom) return;
+      const messages = Array.isArray(data.messages) ? data.messages : [];
+      renderTimeline(messages, requestedRoom);
+      timelineStatus.textContent = messages.length ? '' : 'No recent text messages are available.';
+      timelineStatus.className = 'timeline-status';
+      timelineRetry.hidden = true;
+    } catch (error) {
+      if (!silent) {
+        timelineStatus.textContent = error.message || 'Could not load recent messages.';
+        timelineStatus.className = 'timeline-status error';
+        timelineRetry.hidden = false;
+      }
+    } finally {
+      timelineLoading = false;
+      if (timelineRefreshPending) {
+        timelineRefreshPending = false;
+        loadTimeline({ silent: true });
+      }
+    }
+  };
+
+  const startTimelineRefresh = () => {
+    if (timelineRefreshTimer !== null) clearInterval(timelineRefreshTimer);
+    timelineRefreshTimer = setInterval(() => {
+      if (activeSession && !document.hidden) loadTimeline({ silent: true });
+    }, timelineRefreshInterval);
   };
 
   const showRoom = (session) => {
@@ -138,6 +261,8 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     document.body.classList.add('chat-authenticated');
     setHeaderIdentity(`Nostr: ${nip05}`, 'connected');
     loadTimeline();
+    loadParticipants();
+    startTimelineRefresh();
   };
 
   const sendMessage = async () => {
@@ -191,6 +316,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   const authorizeResolvedIdentity = async ({ pubkey, nip05 }) => {
     try {
       if (!['trustroots.org', 'hitchwiki.org'].some((domain) => nip05.endsWith(`@${domain}`))) {
+        showSignInCard();
         setHeaderIdentity(`Nostr: ${hexToNpub(pubkey).slice(0, 16)}…`, 'unlinked');
         setStatus('This signer does not have a Trustroots or Hitchwiki NIP-05 identity yet.', 'error');
         return;
@@ -200,6 +326,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       setStatus(`Verified ${nip05}. Authorizing chat access…`, 'success');
       await authorizeAndShowRoom(pubkey);
     } catch (error) {
+      showSignInCard();
       if (!verified) setHeaderIdentity('Nostr: identity check failed', 'unlinked');
       setStatus(error.message, 'error');
     }
@@ -207,6 +334,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
 
   document.querySelector('[data-close-nostr-dialog]').addEventListener('click', () => nostrDialog.close());
   window.addEventListener('hitchhiking:nostr-identity', (event) => authorizeResolvedIdentity(event.detail));
+  window.addEventListener('hitchhiking:nostr-unavailable', showSignInCard);
   if (window.hitchhikingNostrIdentity) authorizeResolvedIdentity(window.hitchhikingNostrIdentity);
   timelineRetry.addEventListener('click', loadTimeline);
   chatFilter?.addEventListener('input', () => {
@@ -230,7 +358,13 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   });
   window.addEventListener('hashchange', () => {
     syncRoomNavigation();
-    if (activeSession) loadTimeline();
+    if (activeSession) {
+      loadTimeline();
+      loadParticipants();
+    }
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (activeSession && !document.hidden) loadTimeline({ silent: true });
   });
   const initialize = async () => {
     try {
