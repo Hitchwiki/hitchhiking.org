@@ -14,6 +14,12 @@ describe('authenticated Hitchat timeline', () => {
     expect(aboutPage).toContain('<html lang="en" class="compact-ui">');
   });
 
+  it('links Hitchwiki Maps from every public page header', () => {
+    for (const html of [landingPage, aboutPage, page]) {
+      expect(html).toContain('<a href="https://maps.hitchwiki.org/">Maps</a>');
+    }
+  });
+
   it('keeps first-party Umami analytics on chat and About', () => {
     for (const html of [page, aboutPage]) {
       expect(html).toContain('https://1p.hitchhiking.org/script.js');
