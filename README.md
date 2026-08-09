@@ -12,7 +12,9 @@ Requirements: a current Node.js release and Python 3.
 
 ```sh
 npm ci
+npx playwright install chromium
 npm test
+npm run test:e2e
 npm run dev
 ```
 
@@ -20,6 +22,11 @@ Vite serves the site at `http://127.0.0.1:5173`. The landing page and Nostr
 identity features work without private configuration. The authenticated chat
 timeline calls same-origin `/chat/auth/*` endpoints; those require the separately
 operated production backend and are not part of this repository.
+
+`npm test` runs the fast Vitest and release checks. `npm run test:e2e` starts a
+local Vite server and runs Playwright against deterministic same-origin chat API
+fixtures; it needs no Nostr key, Matrix credential, or production connection.
+Use `npm run test:all` as the complete pre-release gate.
 
 ## Generated map
 
@@ -55,8 +62,8 @@ repository. Always manually review a release in addition to running the checker.
 ## Contributing
 
 Please keep the site usable without a build step, update tests with behavior
-changes, preserve map and asset attribution, and run `npm test` plus
-`scripts/check-release.sh` before opening a pull request.
+changes, preserve map and asset attribution, and run `npm run test:all` before
+publishing.
 
 GitHub Actions runs the same checks for pull requests and pushes to `main`,
 then creates and validates a clean release snapshot. CI has read-only repository

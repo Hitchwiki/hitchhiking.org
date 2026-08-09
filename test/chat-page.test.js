@@ -64,6 +64,20 @@ describe('authenticated Hitchat timeline', () => {
     expect(styles).not.toContain('.timeline-message:nth-child');
   });
 
+  it('renders reaction counts as text and repaints reaction-only updates', () => {
+    expect(script).toContain("reactionList.setAttribute('aria-label', 'Message reactions')");
+    expect(script).toContain('reactionPill.textContent = `${reaction.key} ${reaction.count}`');
+    expect(script).toContain('(message.reactions || []).map((reaction) =>');
+    expect(styles).toContain('.message-reaction');
+    expect(script).not.toContain('innerHTML');
+  });
+
+  it('documents both Meta discussion paths on About', () => {
+    expect(aboutPage).toContain('href="/chat/#meta"');
+    expect(aboutPage).toContain('https://matrix.to/#/#meta:hitchhiking.org');
+    expect(aboutPage).toContain('technical and organizational matters');
+  });
+
   it('uses NIP-07 automatically without connection-choice UI', () => {
     expect(page).toContain('/assets/nostr-identity.js');
     expect(sharedIdentity).toContain("new CustomEvent('hitchhiking:nostr-identity'");
@@ -104,6 +118,8 @@ describe('authenticated Hitchat timeline', () => {
     expect(script).toContain('activeSession?.nip05 === message.nip05');
     expect(script).toContain("requestJSON('/chat/auth/chat/delete'");
     expect(script).toContain("JSON.stringify({ room: 'test', event_id: message.event_id })");
+    expect(script).toContain("remove.textContent = '🗑'");
+    expect(script).toContain("remove.setAttribute('aria-label', 'Delete your message')");
   });
 
   it('focuses the composer only when an authenticated room is writable', () => {
@@ -126,6 +142,6 @@ describe('authenticated Hitchat timeline', () => {
     expect(script).toContain('setInterval(() =>');
     expect(script).toContain("loadTimeline({ silent: true })");
     expect(script).toContain("document.addEventListener('visibilitychange'");
-    expect(script).toContain('messages.map((message) => message.event_id)');
+    expect(script).toContain('messages.map((message) => `${message.event_id}:');
   });
 });

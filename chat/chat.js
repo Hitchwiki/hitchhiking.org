@@ -118,7 +118,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   const renderTimeline = (messages, room) => {
     recentRoomMessages[room] = messages;
     renderParticipantSummary(room);
-    const timelineKey = messages.map((message) => message.event_id).join('\n');
+    const timelineKey = messages.map((message) => `${message.event_id}:${(message.reactions || []).map((reaction) => `${reaction.key}:${reaction.count}`).join(',')}`).join('\n');
     if (renderedRoom === room && renderedTimelineKey === timelineKey) return;
     renderedRoom = room;
     renderedTimelineKey = timelineKey;
@@ -152,6 +152,16 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       const body = document.createElement('p');
       body.className = 'timeline-body';
       body.textContent = message.msgtype === 'm.emote' ? `* ${message.sender} ${message.body}` : message.body;
+      const reactionList = document.createElement('div');
+      reactionList.className = 'message-reactions';
+      reactionList.setAttribute('aria-label', 'Message reactions');
+      for (const reaction of Array.isArray(message.reactions) ? message.reactions : []) {
+        if (typeof reaction.key !== 'string' || !Number.isInteger(reaction.count) || reaction.count < 1) continue;
+        const reactionPill = document.createElement('span');
+        reactionPill.className = 'message-reaction';
+        reactionPill.textContent = `${reaction.key} ${reaction.count}`;
+        reactionList.append(reactionPill);
+      }
       const copy = document.createElement('button');
       copy.className = 'message-copy';
       copy.type = 'button';
@@ -168,7 +178,8 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
         const remove = document.createElement('button');
         remove.className = 'message-delete';
         remove.type = 'button';
-        remove.textContent = 'delete';
+        remove.textContent = '🗑';
+        remove.title = 'Delete message';
         remove.setAttribute('aria-label', 'Delete your message');
         remove.addEventListener('click', async () => {
           if (!window.confirm('Delete this message?')) return;
@@ -187,7 +198,9 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
         actions.append(remove);
       }
       meta.append(sender);
-      bubble.append(meta, body, time);
+      bubble.append(meta, body);
+      if (reactionList.childElementCount) bubble.append(reactionList);
+      bubble.append(time);
       item.append(avatar, bubble, actions);
       timeline.append(item);
     }
