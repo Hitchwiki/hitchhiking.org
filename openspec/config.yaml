@@ -1,0 +1,15 @@
+schema: spec-driven
+
+context: |
+  This repository contains the public, build-free hitchhiking.org site. Public
+  pages use plain HTML, CSS, and browser JavaScript. The authenticated /chat/
+  client calls separately operated same-origin /chat/auth/* endpoints.
+  Preserve the warm Hitchwiki visual style, accessibility, safe text-only
+  rendering, and strong usability on narrow mobile screens. Add browser tests
+  for meaningful interaction changes and keep source releases free of secrets.
+
+rules:
+  proposal:
+    - Keep the public UI scope separate from private backend operations.
+  tasks:
+    - Include automated browser coverage for interactive chat behavior.

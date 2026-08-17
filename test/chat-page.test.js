@@ -36,7 +36,7 @@ describe('authenticated Hitchat timeline', () => {
 
   it('checks the session before requesting messages', () => {
     expect(script.indexOf("requestJSON('/chat/auth/chat/session')")).toBeLessThan(script.lastIndexOf('showRoom(await'));
-    expect(script).toContain('requestJSON(`/chat/auth/chat/timeline?room=${encodeURIComponent(requestedRoom)}`)');
+    expect(script).toContain('requestJSON(`/chat/auth/chat/timeline?${params}`)');
     expect(page).toContain('href="/chat/#meta"');
     expect(page).toContain('href="/chat/#test"');
   });
@@ -64,10 +64,11 @@ describe('authenticated Hitchat timeline', () => {
     expect(styles).not.toContain('.timeline-message:nth-child');
   });
 
-  it('renders reaction counts as text and repaints reaction-only updates', () => {
+  it('renders reaction counts and offers compact reactions in writable rooms', () => {
     expect(script).toContain("reactionList.setAttribute('aria-label', 'Message reactions')");
     expect(script).toContain('reactionPill.textContent = `${reaction.key} ${reaction.count}`');
-    expect(script).toContain('(message.reactions || []).map((reaction) =>');
+    expect(script).toContain("requestJSON('/chat/auth/chat/react'");
+    expect(script).toContain("for (const key of ['👍', '❤️', '😂', '🎉', '👀', '🙏'])");
     expect(styles).toContain('.message-reaction');
     expect(script).not.toContain('innerHTML');
   });
@@ -105,32 +106,54 @@ describe('authenticated Hitchat timeline', () => {
     expect(script).toContain("if (!verified) setHeaderIdentity('Nostr: identity check failed', 'unlinked')");
   });
 
-  it('enables sending only for the internal Test room', () => {
+  it('enables sending in Meta and Test while keeping Hitchat clearly read-only', () => {
     expect(page).toContain('id="chat-composer"');
+    expect(page).toContain('<strong>#hitchat is read-only here.</strong>');
+    expect(script).toContain("const writableRooms = new Set(['meta', 'test'])");
     expect(script).toContain("activeRoom === 'test'");
     expect(script).toContain("requestJSON('/chat/auth/chat/send'");
-    expect(script).toContain("JSON.stringify({ room: 'test', body })");
+    expect(script).toContain('JSON.stringify({ room, body })');
     expect(page).toContain('<option>24h</option>');
-    expect(script).toContain("messageExpiry.textContent = writable ? '24h' : '28d'");
+    expect(script).toContain("messageExpiry.textContent = activeRoom === 'test' ? '24h' : '28d'");
   });
 
   it('offers deletion only for the signed-in NIP-05 author', () => {
-    expect(script).toContain('activeSession?.nip05 === message.nip05');
+    expect(script).toContain("activeSession?.nip05?.toLocaleLowerCase() === message.nip05.toLocaleLowerCase()");
     expect(script).toContain("requestJSON('/chat/auth/chat/delete'");
-    expect(script).toContain("JSON.stringify({ room: 'test', event_id: message.event_id })");
+    expect(script).toContain('JSON.stringify({ room, event_id: message.event_id })');
     expect(script).toContain("remove.textContent = '🗑'");
     expect(script).toContain("remove.setAttribute('aria-label', 'Delete your message')");
   });
 
   it('focuses the composer only when an authenticated room is writable', () => {
-    expect(script).toContain('if (activeSession && writable) messageInput.focus()');
-    expect(script.indexOf('messageInput.readOnly = !writable')).toBeLessThan(script.indexOf('if (activeSession && writable) messageInput.focus()'));
+    expect(script).toContain("if (activeSession && writable && matchMedia('(min-width: 761px)').matches) messageInput.focus({ preventScroll: true })");
+    expect(script.indexOf('messageInput.readOnly = !writable')).toBeLessThan(script.indexOf("if (activeSession && writable && matchMedia('(min-width: 761px)').matches)"));
   });
 
-  it('does not push the chat below a viewport-height sidebar on mobile', () => {
-    expect(styles).toMatch(/@media \(max-width:760px\)[\s\S]*?\.chat-sidebar \{ position:static; height:auto;/);
-    expect(styles).toContain('height:calc(100vh - 5.5rem)');
-    expect(styles).toContain('grid-template-rows:auto minmax(0,1fr)');
+  it('uses dynamic mobile height and prevents iPhone form focus zoom', () => {
+    expect(styles).toContain('height: 100dvh');
+    expect(styles).toContain('grid-template-rows: auto minmax(0, 1fr)');
+    expect(styles).toMatch(/\.chat-search input \{[\s\S]*?font-size: 16px/);
+    expect(styles).toMatch(/\.chat-composer textarea \{[\s\S]*?font-size: 16px/);
+    expect(styles).toMatch(/\.composer-expiry select \{[\s\S]*?font-size: 16px/);
+  });
+
+  it('shows deletion policy beside the room description', () => {
+    expect(page).toContain('id="room-policy"');
+    expect(script).toContain('Messages without reactions are deleted after 24 hours. A reaction keeps a message for up to 28 days.');
+    expect(aboutPage).toContain('messages without reactions are deleted after 24 hours');
+  });
+
+  it('searches loaded message bodies and paginates with the opaque cursor', () => {
+    expect(page).toContain('placeholder="Search chats and messages"');
+    expect(script).toContain('[senderLabelFor(message), message.sender, message.body]');
+    expect(script).toContain("params.set('before', before)");
+    expect(script).toContain('timeline.scrollHeight - previousHeight');
+  });
+
+  it('does not render a copy button on messages', () => {
+    expect(script).not.toContain('message-copy');
+    expect(page).not.toContain('Copy message');
   });
 
   it('starts directly with room messages without a timeline heading', () => {
@@ -140,8 +163,8 @@ describe('authenticated Hitchat timeline', () => {
   it('refreshes authenticated room timelines while the page is visible', () => {
     expect(script).toContain('const timelineRefreshInterval = 5000');
     expect(script).toContain('setInterval(() =>');
-    expect(script).toContain("loadTimeline({ silent: true })");
+    expect(script).toContain("loadTimeline({ room: activeRoom, silent: true })");
     expect(script).toContain("document.addEventListener('visibilitychange'");
-    expect(script).toContain('messages.map((message) => `${message.event_id}:');
+    expect(script).toContain('state.recent = messages');
   });
 });
