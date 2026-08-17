@@ -64,8 +64,10 @@
         <div id="room-participants" class="room-participants" aria-label="Room participants" hidden></div>
         <button id="timeline-older" class="timeline-older" type="button" hidden>Load older messages</button>
         <button id="timeline-retry" class="timeline-retry" type="button" hidden>Try again</button>
-        <p id="timeline-status" class="timeline-status" role="status" aria-live="polite">Loading messages…</p>
-        <ol id="timeline" class="timeline" aria-label="Room messages"></ol>
+        <div class="timeline-wrap">
+          <p id="timeline-status" class="timeline-status" role="status" aria-live="polite">Loading messages…</p>
+          <ol id="timeline" class="timeline" aria-label="Room messages"></ol>
+        </div>
         <p id="room-readonly" class="room-readonly" hidden><strong>#hitchat is read-only here.</strong> Follow the conversation on the web, or join through Matrix or Signal to post.</p>
         <form id="chat-composer" class="chat-composer" aria-label="Message composer">
           <textarea id="message-input" rows="1" maxlength="4000" placeholder="Type a message…" readonly aria-label="Message input"></textarea>

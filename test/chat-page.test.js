@@ -69,6 +69,11 @@ describe('authenticated Hitchat timeline', () => {
     expect(script).toContain('reactionPill.textContent = `${reaction.key} ${reaction.count}`');
     expect(script).toContain("requestJSON('/chat/auth/chat/react'");
     expect(script).toContain("for (const key of ['👍', '❤️', '😂', '🎉', '👀', '🙏'])");
+    expect(script).toContain("reactionPill.classList.toggle('mine', reaction.mine === true)");
+    expect(script).toContain('reaction.mine ? `Remove your ${reaction.key} reaction`');
+    expect(script).toContain('closeReactionPickers(opening ? picker : null)');
+    expect(styles).toMatch(/\.reaction-picker \{[\s\S]*?position: absolute/);
+    expect(styles).toContain('.message-reaction.mine');
     expect(styles).toContain('.message-reaction');
     expect(script).not.toContain('innerHTML');
   });
@@ -130,6 +135,12 @@ describe('authenticated Hitchat timeline', () => {
   it('uses a stable compact timestamp format', () => {
     expect(script).toContain("return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`");
     expect(script).toContain('time.textContent = formatTimestamp(message.timestamp)');
+  });
+
+  it('shows timeline status without shifting messages', () => {
+    expect(page).toContain('<div class="timeline-wrap">');
+    expect(styles).toMatch(/\.timeline-wrap \.timeline-status \{[\s\S]*?position: absolute/);
+    expect(styles).toMatch(/\.timeline-wrap \{[\s\S]*?flex: 1/);
   });
 
   it('focuses the composer only when an authenticated room is writable', () => {

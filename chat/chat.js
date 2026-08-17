@@ -225,8 +225,16 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       });
       await loadTimeline({ room, silent: true });
     } catch (error) {
-      composerStatus.textContent = error.message || 'Reaction could not be added.';
+      composerStatus.textContent = error.message || 'Reaction could not be changed.';
       button.disabled = false;
+    }
+  };
+
+  const closeReactionPickers = (except = null) => {
+    for (const picker of document.querySelectorAll('.reaction-picker:not([hidden])')) {
+      if (picker === except) continue;
+      picker.hidden = true;
+      picker.parentElement?.querySelector('.message-reaction-add')?.setAttribute('aria-expanded', 'false');
     }
   };
 
@@ -265,7 +273,10 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       reactionPill.textContent = `${reaction.key} ${reaction.count}`;
       if (reactionPill instanceof HTMLButtonElement) {
         reactionPill.type = 'button';
-        reactionPill.title = `Add ${reaction.key} reaction`;
+        reactionPill.classList.toggle('mine', reaction.mine === true);
+        reactionPill.setAttribute('aria-pressed', String(reaction.mine === true));
+        reactionPill.title = reaction.mine ? `Remove your ${reaction.key} reaction` : `Add ${reaction.key} reaction`;
+        reactionPill.setAttribute('aria-label', reactionPill.title);
         reactionPill.addEventListener('click', () => reactToMessage(message, room, reaction.key, reactionPill));
       }
       reactionList.append(reactionPill);
@@ -280,18 +291,24 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
         choice.textContent = key;
         choice.title = `React with ${key}`;
         choice.setAttribute('aria-label', `React with ${key}`);
-        choice.addEventListener('click', () => reactToMessage(message, room, key, choice));
+        choice.addEventListener('click', () => {
+          picker.hidden = true;
+          addReaction.setAttribute('aria-expanded', 'false');
+          reactToMessage(message, room, key, choice);
+        });
         picker.append(choice);
       }
       const addReaction = document.createElement('button');
       addReaction.className = 'message-reaction-add';
       addReaction.type = 'button';
-      addReaction.textContent = '+';
+      addReaction.textContent = '＋';
       addReaction.title = 'Add a reaction';
       addReaction.setAttribute('aria-label', 'Add a reaction');
       addReaction.setAttribute('aria-expanded', 'false');
       addReaction.addEventListener('click', () => {
-        picker.hidden = !picker.hidden;
+        const opening = picker.hidden;
+        closeReactionPickers(opening ? picker : null);
+        picker.hidden = !opening;
         addReaction.setAttribute('aria-expanded', String(!picker.hidden));
       });
       reactionList.append(addReaction, picker);
@@ -563,6 +580,9 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   composer.addEventListener('submit', (event) => {
     event.preventDefault();
     sendMessage();
+  });
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.message-reactions')) closeReactionPickers();
   });
   window.addEventListener('hashchange', () => {
     syncRoomNavigation();
