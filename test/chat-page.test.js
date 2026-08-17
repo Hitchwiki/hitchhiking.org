@@ -41,6 +41,14 @@ describe('authenticated Hitchat timeline', () => {
     expect(page).toContain('href="/chat/#test"');
   });
 
+  it('shows a desktop sidebar footer with source and latest version time', () => {
+    expect(page).toContain('<footer class="sidebar-build sidebar-footer">');
+    expect(page).toContain('aria-label="hitchhiking.org source on GitHub"');
+    expect(page).toContain('<time datetime="2026-08-17T17:40:00+01:00">2026-08-17 17:40</time>');
+    expect(styles).toMatch(/\.sidebar-footer \{[\s\S]*?margin: auto/);
+    expect(styles).toMatch(/@media \(max-width: 760px\)[\s\S]*?\.sidebar-build \{[\s\S]*?display: none/);
+  });
+
   it('renders Matrix-controlled sender and body values as text', () => {
     expect(script).toContain('sender.textContent = senderLabel');
     expect(script).toContain("body.textContent = message.msgtype === 'm.emote'");

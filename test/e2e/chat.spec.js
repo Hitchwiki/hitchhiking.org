@@ -96,6 +96,8 @@ test('shows avatars, stable fallbacks, reactions, and the room policy', async ({
   await expect(page.locator('#timeline .timeline-message')).toHaveCount(3);
   await expect(page.locator('#room-participants')).toContainText('Matrix 4');
   await expect(page.locator('#room-participants')).toContainText('Signal 12');
+  await expect(page.locator('.sidebar-footer')).toContainText('2026-08-17 17:40');
+  await expect(page.getByRole('link', { name: 'hitchhiking.org source on GitHub' })).toBeVisible();
   await expect(page.getByLabel('Message reactions').getByText('👍 3')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Add a reaction' })).toHaveCount(0);
   await expect(page.locator('.timeline-avatar-image')).toHaveCount(2);
@@ -159,6 +161,7 @@ test('mobile layout stays compact and avoids iPhone focus zoom', async ({ page }
   await page.goto('/chat/#hitchat');
 
   await expect(page.locator('#room-readonly')).toBeVisible();
+  await expect(page.locator('.sidebar-footer')).toBeHidden();
   await expect(page.locator('#chat-composer')).toBeHidden();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 

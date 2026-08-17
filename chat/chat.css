@@ -62,6 +62,61 @@ dialog { position:relative; width:min(100% - 2rem,32rem); padding:2rem; color:va
   padding: 12px 10px;
 }
 
+.sidebar-footer {
+  display: flex;
+  margin: auto 6px 0;
+  padding: 10px 4px 2px;
+  align-items: center;
+  justify-content: space-between;
+  color: #708881;
+  border-top: 1px solid #dbe6e2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  opacity: 1;
+  text-align: left;
+}
+
+.sidebar-footer > span {
+  color: #8a9d98;
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.sidebar-footer > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.sidebar-footer .commit-link {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  place-items: center;
+  color: #42665e;
+  background: #eef5f2;
+  border-radius: 50%;
+}
+
+.sidebar-footer .commit-link:hover,
+.sidebar-footer .commit-link:focus-visible {
+  color: #fff;
+  background: #2f8876;
+}
+
+.sidebar-footer .commit-link svg {
+  width: 15px;
+  height: 15px;
+}
+
+.sidebar-footer time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .chat-search {
   margin-bottom: 6px;
 }
