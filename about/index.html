@@ -62,8 +62,9 @@
       <section>
         <h2>How messages reach the page</h2>
         <p>The browser never receives Matrix credentials. After NIP-05 verification, a same-origin backend uses a non-admin Matrix reader account to return bounded recent timelines from Hitchat, Meta and Test containing plain text, notices and emotes.</p>
-        <p><a href="/chat/#test"><code>#test:hitchhiking.org</code></a> also accepts web messages through <code>@webchat:hitchhiking.org</code>. That account is joined only to Test and Meta, never Hitchat. Each web message starts with an italic <q>by</q> link to the verified Trustroots profile, or the Hitchwiki user page once Hitchwiki NIP-05 is ready. Test messages expire locally after 24 hours.</p>
-        <p>Supported Matrix reactions are shown with their counts. Membership changes, encrypted events, media, edits and redactions are not rendered on the page. To participate in Hitchat or Meta, or see complete room features, use a Matrix client or the Signal group.</p>
+        <p><a href="/chat/#meta"><code>#meta:hitchhiking.org</code></a> and <a href="/chat/#test"><code>#test:hitchhiking.org</code></a> accept web messages through <code>@webchat:hitchhiking.org</code>. That account is joined only to Meta and Test, never Hitchat. Each web message links to the verified Trustroots profile, or the Hitchwiki user page once Hitchwiki NIP-05 is ready.</p>
+        <p>Hitchat and Meta messages are deleted after 28 days. In Test, messages without reactions are deleted after 24 hours; any supported reaction keeps a message for up to 28 days. The selected room shows this policy next to its description.</p>
+        <p>Supported Matrix reactions are shown with their counts, and signed-in readers can add reactions in Meta and Test. Membership changes, encrypted events, media, edits and redactions are not rendered on the page. To post in Hitchat or use complete room features, use a Matrix client or the Signal group.</p>
       </section>
 
       <section>
