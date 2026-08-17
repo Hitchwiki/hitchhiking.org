@@ -123,6 +123,13 @@ describe('authenticated Hitchat timeline', () => {
     expect(script).toContain('JSON.stringify({ room, event_id: message.event_id })');
     expect(script).toContain("remove.textContent = '🗑'");
     expect(script).toContain("remove.setAttribute('aria-label', 'Delete your message')");
+    expect(script.indexOf('footer.append(time)')).toBeLessThan(script.indexOf('footer.append(remove)'));
+    expect(styles).toContain('.message-footer .timeline-time');
+  });
+
+  it('uses a stable compact timestamp format', () => {
+    expect(script).toContain("return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`");
+    expect(script).toContain('time.textContent = formatTimestamp(message.timestamp)');
   });
 
   it('focuses the composer only when an authenticated room is writable', () => {

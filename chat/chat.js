@@ -51,6 +51,11 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
 
   const normalizedSearch = () => chatFilter?.value.trim().toLocaleLowerCase() || '';
   const senderLabelFor = (message) => message.nip05 || message.sender;
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const pad = (value) => String(value).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  };
   const roomMessages = (room) => {
     const byEvent = new Map();
     for (const message of [...timelines[room].older, ...timelines[room].recent]) {
@@ -246,7 +251,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     const time = document.createElement('time');
     time.className = 'timeline-time';
     time.dateTime = new Date(message.timestamp).toISOString();
-    time.textContent = new Date(message.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+    time.textContent = formatTimestamp(message.timestamp);
     const body = document.createElement('p');
     body.className = 'timeline-body';
     body.textContent = message.msgtype === 'm.emote' ? `* ${message.sender} ${message.body}` : message.body;
@@ -293,6 +298,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     }
     const footer = document.createElement('div');
     footer.className = 'message-footer';
+    footer.append(time);
     if (writableRooms.has(room) && message.nip05 && activeSession?.nip05?.toLocaleLowerCase() === message.nip05.toLocaleLowerCase()) {
       const remove = document.createElement('button');
       remove.className = 'message-delete';
@@ -306,7 +312,6 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     meta.append(sender);
     bubble.append(meta, body);
     if (reactionList.childElementCount) bubble.append(reactionList);
-    footer.append(time);
     bubble.append(footer);
     item.append(avatar, bubble);
     return item;

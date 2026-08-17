@@ -188,20 +188,23 @@ dialog { position:relative; width:min(100% - 2rem,32rem); padding:2rem; color:va
 
 .message-footer {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
-  gap: 6px;
+  gap: 4px;
+  margin-top: 4px;
 }
 
-.timeline-time {
-  margin-top: 4px;
+.message-footer .timeline-time {
+  margin: 0;
   font-size: 11px;
 }
 
 .message-delete {
-  width: 28px;
-  height: 28px;
-  font-size: 13px;
+  width: 24px;
+  height: 24px;
+  border-color: transparent;
+  background: transparent;
+  font-size: 12px;
 }
 
 .message-reactions {
