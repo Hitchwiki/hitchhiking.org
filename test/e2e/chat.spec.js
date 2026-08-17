@@ -72,10 +72,17 @@ async function installChatFixtures(page) {
     if (target) {
       target.reactions ||= [];
       const existing = target.reactions.find((reaction) => reaction.key === payload.key);
-      if (existing) existing.count += 1;
-      else target.reactions.push({ key: payload.key, count: 1 });
+      if (existing?.mine) {
+        existing.count -= 1;
+        target.reactions = target.reactions.filter((reaction) => reaction.count > 0);
+        return route.fulfill({ json: { event_id: '$reaction', active: false } });
+      }
+      if (existing) {
+        existing.count += 1;
+        existing.mine = true;
+      } else target.reactions.push({ key: payload.key, count: 1, mine: true });
     }
-    return route.fulfill({ json: { event_id: '$reaction' } });
+    return route.fulfill({ json: { event_id: '$reaction', active: true } });
   });
   return state;
 }
@@ -126,6 +133,12 @@ test('Meta is writable, supports reactions and deletion, while Test explains con
   await page.getByRole('button', { name: 'React with 👍' }).click();
   await expect.poll(() => state.reacted).toEqual([{ room: 'meta', event_id: '$meta', key: '👍' }]);
   await expect(page.getByLabel('Message reactions').getByText('👍 1')).toBeVisible();
+  await page.getByRole('button', { name: 'Remove your 👍 reaction' }).click();
+  await expect.poll(() => state.reacted).toEqual([
+    { room: 'meta', event_id: '$meta', key: '👍' },
+    { room: 'meta', event_id: '$meta', key: '👍' },
+  ]);
+  await expect(page.getByLabel('Message reactions').getByText('👍 1')).toHaveCount(0);
 
   const input = page.getByLabel('Message input');
   await input.fill('New Meta post');
@@ -150,6 +163,8 @@ test('mobile layout stays compact and avoids iPhone focus zoom', async ({ page }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
   await page.getByRole('link', { name: /#meta/ }).click();
+  await page.getByRole('button', { name: 'Add a reaction' }).click();
+  await expect(page.locator('.reaction-picker')).toBeVisible();
   const sizes = await page.evaluate(() => ({
     search: parseFloat(getComputedStyle(document.querySelector('#chat-filter')).fontSize),
     input: parseFloat(getComputedStyle(document.querySelector('#message-input')).fontSize),
@@ -159,4 +174,6 @@ test('mobile layout stays compact and avoids iPhone focus zoom', async ({ page }
   expect(sizes.input).toBeGreaterThanOrEqual(16);
   expect(sizes.expiry).toBeGreaterThanOrEqual(16);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.locator('#room-title').click();
+  await expect(page.locator('.reaction-picker')).toBeHidden();
 });

@@ -51,6 +51,11 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
 
   const normalizedSearch = () => chatFilter?.value.trim().toLocaleLowerCase() || '';
   const senderLabelFor = (message) => message.nip05 || message.sender;
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const pad = (value) => String(value).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  };
   const roomMessages = (room) => {
     const byEvent = new Map();
     for (const message of [...timelines[room].older, ...timelines[room].recent]) {
@@ -220,8 +225,16 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       });
       await loadTimeline({ room, silent: true });
     } catch (error) {
-      composerStatus.textContent = error.message || 'Reaction could not be added.';
+      composerStatus.textContent = error.message || 'Reaction could not be changed.';
       button.disabled = false;
+    }
+  };
+
+  const closeReactionPickers = (except = null) => {
+    for (const picker of document.querySelectorAll('.reaction-picker:not([hidden])')) {
+      if (picker === except) continue;
+      picker.hidden = true;
+      picker.parentElement?.querySelector('.message-reaction-add')?.setAttribute('aria-expanded', 'false');
     }
   };
 
@@ -246,7 +259,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     const time = document.createElement('time');
     time.className = 'timeline-time';
     time.dateTime = new Date(message.timestamp).toISOString();
-    time.textContent = new Date(message.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+    time.textContent = formatTimestamp(message.timestamp);
     const body = document.createElement('p');
     body.className = 'timeline-body';
     body.textContent = message.msgtype === 'm.emote' ? `* ${message.sender} ${message.body}` : message.body;
@@ -260,7 +273,10 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       reactionPill.textContent = `${reaction.key} ${reaction.count}`;
       if (reactionPill instanceof HTMLButtonElement) {
         reactionPill.type = 'button';
-        reactionPill.title = `Add ${reaction.key} reaction`;
+        reactionPill.classList.toggle('mine', reaction.mine === true);
+        reactionPill.setAttribute('aria-pressed', String(reaction.mine === true));
+        reactionPill.title = reaction.mine ? `Remove your ${reaction.key} reaction` : `Add ${reaction.key} reaction`;
+        reactionPill.setAttribute('aria-label', reactionPill.title);
         reactionPill.addEventListener('click', () => reactToMessage(message, room, reaction.key, reactionPill));
       }
       reactionList.append(reactionPill);
@@ -275,24 +291,31 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
         choice.textContent = key;
         choice.title = `React with ${key}`;
         choice.setAttribute('aria-label', `React with ${key}`);
-        choice.addEventListener('click', () => reactToMessage(message, room, key, choice));
+        choice.addEventListener('click', () => {
+          picker.hidden = true;
+          addReaction.setAttribute('aria-expanded', 'false');
+          reactToMessage(message, room, key, choice);
+        });
         picker.append(choice);
       }
       const addReaction = document.createElement('button');
       addReaction.className = 'message-reaction-add';
       addReaction.type = 'button';
-      addReaction.textContent = '+';
+      addReaction.textContent = '＋';
       addReaction.title = 'Add a reaction';
       addReaction.setAttribute('aria-label', 'Add a reaction');
       addReaction.setAttribute('aria-expanded', 'false');
       addReaction.addEventListener('click', () => {
-        picker.hidden = !picker.hidden;
+        const opening = picker.hidden;
+        closeReactionPickers(opening ? picker : null);
+        picker.hidden = !opening;
         addReaction.setAttribute('aria-expanded', String(!picker.hidden));
       });
       reactionList.append(addReaction, picker);
     }
     const footer = document.createElement('div');
     footer.className = 'message-footer';
+    footer.append(time);
     if (writableRooms.has(room) && message.nip05 && activeSession?.nip05?.toLocaleLowerCase() === message.nip05.toLocaleLowerCase()) {
       const remove = document.createElement('button');
       remove.className = 'message-delete';
@@ -306,7 +329,6 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     meta.append(sender);
     bubble.append(meta, body);
     if (reactionList.childElementCount) bubble.append(reactionList);
-    footer.append(time);
     bubble.append(footer);
     item.append(avatar, bubble);
     return item;
@@ -558,6 +580,9 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   composer.addEventListener('submit', (event) => {
     event.preventDefault();
     sendMessage();
+  });
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.message-reactions')) closeReactionPickers();
   });
   window.addEventListener('hashchange', () => {
     syncRoomNavigation();

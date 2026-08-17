@@ -146,6 +146,35 @@ dialog { position:relative; width:min(100% - 2rem,32rem); padding:2rem; color:va
   gap: 8px;
 }
 
+.timeline-wrap {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex: 1;
+}
+
+.timeline-wrap .timeline {
+  flex: 1;
+}
+
+.timeline-wrap .timeline-status {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  z-index: 2;
+  width: max-content;
+  max-width: calc(100% - 20px);
+  padding: 4px 9px;
+  background: rgba(245, 247, 246, .94);
+  border: 1px solid #d7e3df;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(35, 71, 63, .1);
+  font-size: 12px;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
 .timeline-message {
   align-items: flex-end;
   gap: 7px;
@@ -188,20 +217,23 @@ dialog { position:relative; width:min(100% - 2rem,32rem); padding:2rem; color:va
 
 .message-footer {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
-  gap: 6px;
+  gap: 4px;
+  margin-top: 4px;
 }
 
-.timeline-time {
-  margin-top: 4px;
+.message-footer .timeline-time {
+  margin: 0;
   font-size: 11px;
 }
 
 .message-delete {
-  width: 28px;
-  height: 28px;
-  font-size: 13px;
+  width: 24px;
+  height: 24px;
+  border-color: transparent;
+  background: transparent;
+  font-size: 12px;
 }
 
 .message-reactions {
@@ -229,12 +261,38 @@ dialog { position:relative; width:min(100% - 2rem,32rem); padding:2rem; color:va
 .message-reaction-add {
   min-width: 28px;
   padding-inline: 6px;
+  color: #52756d;
+  background: transparent;
+  border-style: dashed;
+}
+
+.message-reaction:hover,
+.message-reaction:focus-visible {
+  background: #d4e9e3;
+  border-color: #91beb3;
+}
+
+.message-reaction.mine {
+  color: #fff;
+  background: #2f8876;
+  border-color: #2f8876;
 }
 
 .reaction-picker {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 3;
   display: flex;
+  width: max-content;
+  max-width: 156px;
   flex-wrap: wrap;
-  gap: 3px;
+  gap: 4px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #c7ddd7;
+  border-radius: 10px;
+  box-shadow: 0 5px 18px rgba(35, 71, 63, .18);
 }
 
 .reaction-picker[hidden] {
@@ -242,8 +300,16 @@ dialog { position:relative; width:min(100% - 2rem,32rem); padding:2rem; color:va
 }
 
 .reaction-picker button {
-  min-width: 30px;
-  padding-inline: 4px;
+  min-width: 32px;
+  padding: 3px 5px;
+  background: #f4f8f6;
+  border-color: transparent;
+  font-size: 16px;
+}
+
+.reaction-picker button:hover,
+.reaction-picker button:focus-visible {
+  background: #e0efeb;
 }
 
 .room-readonly {
