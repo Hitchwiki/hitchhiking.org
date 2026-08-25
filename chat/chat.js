@@ -15,6 +15,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   const timelineOlder = document.querySelector('#timeline-older');
   const headerIdentity = document.querySelector('#nostr-identity');
   const nostrDialog = document.querySelector('#nostr-info');
+  const nip07Retry = document.querySelector('#nip07-retry');
   const chatFilter = document.querySelector('#chat-filter');
   const chatSearchStatus = document.querySelector('#chat-search-status');
   const composer = document.querySelector('#chat-composer');
@@ -23,6 +24,8 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   const messageExpiry = document.querySelector('#message-expiry option');
   const composerStatus = document.querySelector('#composer-status');
   let verified = null;
+  let resolvedIdentity = null;
+  let authorizationInFlight = false;
   let activeSession = null;
   let activeRoom = 'hitchat';
   let timelineRefreshTimer = null;
@@ -540,6 +543,8 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   };
 
   const authorizeResolvedIdentity = async ({ pubkey, nip05 }) => {
+    if (authorizationInFlight) return;
+    authorizationInFlight = true;
     try {
       if (!['trustroots.org', 'hitchwiki.org'].some((domain) => nip05.endsWith(`@${domain}`))) {
         showSignInCard();
@@ -547,6 +552,8 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
         setStatus('This signer does not have a Trustroots or Hitchwiki NIP-05 identity yet.', 'error');
         return;
       }
+      resolvedIdentity = { pubkey, nip05 };
+      nip07Retry.hidden = true;
       prepareNip05(nip05);
       setHeaderIdentity(`Nostr: ${nip05}`, 'connected');
       setStatus(`Verified ${nip05}. Authorizing chat access…`, 'success');
@@ -555,12 +562,18 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
       showSignInCard();
       if (!verified) setHeaderIdentity('Nostr: identity check failed', 'unlinked');
       setStatus(error.message, 'error');
+      nip07Retry.hidden = !resolvedIdentity;
+    } finally {
+      authorizationInFlight = false;
     }
   };
 
   document.querySelector('[data-close-nostr-dialog]').addEventListener('click', () => nostrDialog.close());
   window.addEventListener('hitchhiking:nostr-identity', (event) => authorizeResolvedIdentity(event.detail));
   window.addEventListener('hitchhiking:nostr-unavailable', showSignInCard);
+  nip07Retry.addEventListener('click', () => {
+    if (resolvedIdentity) authorizeResolvedIdentity(resolvedIdentity);
+  });
   if (window.hitchhikingNostrIdentity) authorizeResolvedIdentity(window.hitchhikingNostrIdentity);
   timelineRetry.addEventListener('click', () => loadTimeline({ room: activeRoom }));
   timelineOlder.addEventListener('click', () => {
