@@ -87,6 +87,108 @@ async function installChatFixtures(page) {
   return state;
 }
 
+async function installNip07Fixtures(page, { injectionDelay = 0, signerFailures = 0, challengeFailures = 0 } = {}) {
+  const pubkey = 'a'.repeat(64);
+  const state = { authorized: false, challenges: 0, verifies: [] };
+
+  await page.addInitScript(({ injectedPubkey, delay, failures }) => {
+    window.__nip07Calls = { getPublicKey: 0, signed: [] };
+    class RelaySocket {
+      constructor() { setTimeout(() => this.onopen?.(), 0); }
+      send(raw) {
+        const [, subscription] = JSON.parse(raw);
+        setTimeout(() => {
+          this.onmessage?.({ data: JSON.stringify(['EVENT', subscription, {
+            kind: 0,
+            pubkey: injectedPubkey,
+            tags: [],
+            content: JSON.stringify({ nip05: 'alice@trustroots.org' }),
+          }]) });
+          this.onmessage?.({ data: JSON.stringify(['EOSE', subscription]) });
+        }, 0);
+      }
+      close() {}
+    }
+    window.WebSocket = RelaySocket;
+    setTimeout(() => {
+      window.nostr = {
+        getPublicKey: async () => {
+          window.__nip07Calls.getPublicKey += 1;
+          if (window.__nip07Calls.getPublicKey <= failures) throw new Error('Signer is locked');
+          return injectedPubkey;
+        },
+        signEvent: async (event) => {
+          window.__nip07Calls.signed.push(event);
+          return { ...event, pubkey: injectedPubkey, id: 'b'.repeat(64), sig: 'c'.repeat(128) };
+        },
+      };
+    }, delay);
+  }, { injectedPubkey: pubkey, delay: injectionDelay, failures: signerFailures });
+
+  await page.route('https://1p.hitchhiking.org/**', (route) => route.abort());
+  await page.route('**/chat/auth/chat/session', (route) => route.fulfill({
+    status: state.authorized ? 200 : 401,
+    json: state.authorized ? session : { error: 'Sign in required.' },
+  }));
+  await page.route('**/chat/auth/login/trustroots/challenge', (route) => {
+    state.challenges += 1;
+    if (state.challenges <= challengeFailures) {
+      return route.fulfill({ status: 503, json: { error: 'Authorization is temporarily unavailable.' } });
+    }
+    return route.fulfill({ json: { challenge_id: 'challenge-id', challenge: 'challenge-value' } });
+  });
+  await page.route('**/chat/auth/chat/verify', (route) => {
+    state.verifies.push(route.request().postDataJSON());
+    state.authorized = true;
+    return route.fulfill({ json: { authenticated: true } });
+  });
+  await page.route('**/chat/auth/chat/timeline**', (route) => route.fulfill({
+    json: { room: 'hitchat', messages: [], next_batch: '', has_more: false },
+  }));
+  await page.route('**/chat/auth/chat/participants**', (route) => route.fulfill({
+    json: { room: 'hitchat', participants: { matrix: 0, signal: 0 } },
+  }));
+  return { pubkey, state };
+}
+
+test('authorizes a NIP-07 signer that is injected after page load', async ({ page }) => {
+  const { pubkey, state } = await installNip07Fixtures(page, { injectionDelay: 600 });
+  await page.goto('/chat/');
+
+  await expect(page.locator('#result')).toBeVisible();
+  await expect(page.locator('#nostr-identity')).toHaveText('Nostr: alice@trustroots.org');
+  await expect.poll(() => state.verifies).toHaveLength(1);
+  expect(state.verifies[0]).toMatchObject({ challenge_id: 'challenge-id', nip05: 'alice@trustroots.org' });
+  expect(state.verifies[0].event).toMatchObject({ kind: 27235, pubkey, content: '' });
+  expect(state.verifies[0].event.tags).toEqual([
+    ['u', 'http://127.0.0.1:4173/chat/auth/chat/verify'],
+    ['method', 'POST'],
+    ['challenge', 'challenge-value'],
+  ]);
+});
+
+test('can retry after a locked NIP-07 signer is unlocked', async ({ page }) => {
+  await installNip07Fixtures(page, { signerFailures: 1 });
+  await page.goto('/chat/');
+
+  await expect(page.locator('.sign-in-card')).toBeVisible();
+  await page.locator('#nostr-identity').click();
+  await page.getByRole('button', { name: 'Check my signer again' }).click();
+  await expect(page.locator('#result')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__nip07Calls.getPublicKey)).toBe(2);
+});
+
+test('can retry after a transient NIP-07 authorization failure', async ({ page }) => {
+  const { state } = await installNip07Fixtures(page, { challengeFailures: 1 });
+  await page.goto('/chat/');
+
+  await expect(page.getByText('Authorization is temporarily unavailable.')).toBeVisible();
+  await page.getByRole('button', { name: 'Try NIP-07 again' }).click();
+  await expect(page.locator('#result')).toBeVisible();
+  expect(state.challenges).toBe(2);
+  expect(state.verifies).toHaveLength(1);
+});
+
 test('shows avatars, stable fallbacks, reactions, and the room policy', async ({ page }) => {
   await installChatFixtures(page);
   await page.goto('/chat/#hitchat');
