@@ -87,17 +87,34 @@ async function installChatFixtures(page) {
   return state;
 }
 
-async function installNip07Fixtures(page, { injectionDelay = 0, signerFailures = 0, challengeFailures = 0 } = {}) {
+async function installNip07Fixtures(page, { injectionDelay = 0, signerFailures = 0, challengeFailures = 0, relayMode = 'public', verifyFailure = false } = {}) {
   const pubkey = 'a'.repeat(64);
   const state = { authorized: false, challenges: 0, verifies: [] };
 
-  await page.addInitScript(({ injectedPubkey, delay, failures }) => {
+  await page.addInitScript(({ injectedPubkey, delay, failures, mode }) => {
     window.__nip07Calls = { getPublicKey: 0, signed: [] };
     class RelaySocket {
-      constructor() { setTimeout(() => this.onopen?.(), 0); }
-      send(raw) {
-        const [, subscription] = JSON.parse(raw);
+      constructor(url) {
+        this.url = url;
         setTimeout(() => {
+          this.onopen?.();
+          if (url.includes('nip42') && mode !== 'empty') this.emit(['AUTH', 'relay-challenge']);
+        }, 0);
+      }
+      emit(message) { this.onmessage?.({ data: JSON.stringify(message) }); }
+      send(raw) {
+        const [type, subscription] = JSON.parse(raw);
+        if (type === 'AUTH') {
+          this.authenticated = mode !== 'rejected';
+          this.emit(['OK', subscription.id, this.authenticated, '']);
+          return;
+        }
+        setTimeout(() => {
+          if (mode !== 'public' && !this.authenticated) {
+            if (this.url.includes('nip42') && mode !== 'empty') this.emit(['CLOSED', subscription, 'auth-required: sign in']);
+            else this.emit(['EOSE', subscription]);
+            return;
+          }
           this.onmessage?.({ data: JSON.stringify(['EVENT', subscription, {
             kind: 0,
             pubkey: injectedPubkey,
@@ -119,11 +136,12 @@ async function installNip07Fixtures(page, { injectionDelay = 0, signerFailures =
         },
         signEvent: async (event) => {
           window.__nip07Calls.signed.push(event);
+          if (mode === 'declined' && event.kind === 22242) throw new Error('Declined');
           return { ...event, pubkey: injectedPubkey, id: 'b'.repeat(64), sig: 'c'.repeat(128) };
         },
       };
     }, delay);
-  }, { injectedPubkey: pubkey, delay: injectionDelay, failures: signerFailures });
+  }, { injectedPubkey: pubkey, delay: injectionDelay, failures: signerFailures, mode: relayMode });
 
   await page.route('https://1p.hitchhiking.org/**', (route) => route.abort());
   await page.route('**/chat/auth/chat/session', (route) => route.fulfill({
@@ -139,6 +157,7 @@ async function installNip07Fixtures(page, { injectionDelay = 0, signerFailures =
   });
   await page.route('**/chat/auth/chat/verify', (route) => {
     state.verifies.push(route.request().postDataJSON());
+    if (verifyFailure) return route.fulfill({ status: 403, json: { error: 'pubkey does not match nip05' } });
     state.authorized = true;
     return route.fulfill({ json: { authenticated: true } });
   });
@@ -150,6 +169,38 @@ async function installNip07Fixtures(page, { injectionDelay = 0, signerFailures =
   }));
   return { pubkey, state };
 }
+
+test('discovers identity on NIP-42 relay after public relay returns no metadata', async ({ page }) => {
+  await installNip07Fixtures(page, { relayMode: 'authenticated' });
+  await page.goto('/chat/');
+  await expect(page.locator('#result')).toBeVisible();
+  const signed = await page.evaluate(() => window.__nip07Calls.signed);
+  expect(signed.map((event) => event.kind)).toEqual([22242, 27235]);
+  expect(signed[0].tags).toEqual([['relay', 'wss://nip42.trustroots.org'], ['challenge', 'relay-challenge']]);
+});
+
+for (const relayMode of ['empty', 'declined', 'rejected']) {
+  test(`direct identity entry recovers from ${relayMode} relay discovery`, async ({ page }) => {
+    const { state } = await installNip07Fixtures(page, { relayMode });
+    await page.goto('/chat/');
+    await expect(page.locator('#status')).toContainText('couldn’t discover');
+    await page.getByLabel('Your NIP-05 identity').fill(' Alice@Trustroots.org ');
+    await page.getByRole('button', { name: 'Sign in with Nostr', exact: true }).click();
+    await expect(page.locator('#result')).toBeVisible();
+    expect(state.verifies[0].nip05).toBe('alice@trustroots.org');
+  });
+}
+
+test('a mismatched manual identity remains rejected by the server', async ({ page }) => {
+  await installNip07Fixtures(page, { relayMode: 'empty', verifyFailure: true });
+  await page.goto('/chat/');
+  await expect(page.locator('#status')).toContainText('couldn’t discover');
+  await page.getByLabel('Your NIP-05 identity').fill('bob@hitchwiki.org');
+  await page.getByRole('button', { name: 'Sign in with Nostr', exact: true }).click();
+  await expect(page.locator('#status')).toHaveText('pubkey does not match nip05');
+  await expect(page.locator('#result')).toBeHidden();
+  await expect(page.getByLabel('Your NIP-05 identity')).toBeEditable();
+});
 
 test('authorizes a NIP-07 signer that is injected after page load', async ({ page }) => {
   const { pubkey, state } = await installNip07Fixtures(page, { injectionDelay: 600 });

@@ -7,7 +7,7 @@
     <meta name="description" content="Hitchwiki and Trustroots member access to the Hitchhiking Matrix chat." />
     <title>Hitchhiking chat</title>
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="stylesheet" href="/chat/chat.css?v=20260817-4" />
+    <link rel="stylesheet" href="/chat/chat.css?v=20260914-1" />
     <script defer src="https://1p.hitchhiking.org/script.js" data-website-id="166e3735-3228-4608-b43a-92761a55499e"></script>
   </head>
   <body class="chat-page">
@@ -58,6 +58,14 @@
         <p class="field-help">We’ll use your browser’s Nostr signer and verify its <strong>@hitchwiki.org</strong> or <strong>@trustroots.org</strong> identity. No private key leaves your signer.</p>
         <p id="status" class="status" role="status" aria-live="polite">Checking for your Nostr signer…</p>
         <button id="nip07-retry" class="primary" type="button" hidden>Try NIP-07 again</button>
+        <form id="nip05-form">
+          <label for="nip05-address">Your NIP-05 identity</label>
+          <div class="input-row">
+            <input id="nip05-address" name="nip05" type="text" placeholder="name@trustroots.org" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+            <button class="primary" type="submit">Sign in with Nostr</button>
+          </div>
+          <p class="field-help">If automatic discovery misses your identity, enter your @hitchwiki.org or @trustroots.org address here.</p>
+        </form>
         <p class="setup-link">Need a signer or NIP-05 identity? <a href="https://nos.trustroots.org/">Set it up at nos.trustroots.org</a></p>
 
       </section>
@@ -85,7 +93,7 @@
     </main>
     </div>
 
-    <script type="module" src="/assets/nostr-identity.js?v=20260808-7"></script>
-    <script type="module" src="/chat/chat.js?v=20260817-4"></script>
+    <script type="module" src="/assets/nostr-identity.js?v=20260914-1"></script>
+    <script type="module" src="/chat/chat.js?v=20260914-1"></script>
   </body>
 </html>

@@ -34,6 +34,12 @@ jobs:
       - name: Run tests and source checks
         run: npm test
 
+      - name: Install browser for chat regression tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Test chat sign-in and interactions
+        run: npm run test:e2e
+
       - name: Validate release scripts without executing them
         run: bash -n scripts/*.sh
 
