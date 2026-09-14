@@ -18,6 +18,9 @@ main { width:min(100% - 2rem, 48rem); margin:0 auto; padding:clamp(3rem,8vw,6.5r
 .chat-page .room-card > h2,.chat-page .room-card > #room-description { text-align:left; }
 .chat-page .hero,
 .chat-page .sign-in-card { width:min(100% - 2rem,48rem); margin-right:auto; margin-left:auto; }
+#nip05-form { margin-top:1.2rem; }
+#nip05-form .input-row { flex-wrap:wrap; }
+#nip05-address { width:100%; }
 .chat-authenticated .hero { display:none; }
 .chat-page .room-card { margin-top:0; }
 #room-description { white-space:pre-line; }

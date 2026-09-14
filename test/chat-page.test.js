@@ -110,7 +110,7 @@ describe('authenticated Hitchat timeline', () => {
     expect(sharedIdentity).not.toContain('pubkey.slice(');
     for (const html of [landingPage, aboutPage, page]) {
       expect(html).toContain('type="module"');
-      expect(html).toContain('nostr-identity.js?v=20260808-7');
+      expect(html).toContain('nostr-identity.js?v=20260914-1');
     }
   });
 

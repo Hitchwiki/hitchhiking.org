@@ -16,6 +16,9 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   const headerIdentity = document.querySelector('#nostr-identity');
   const nostrDialog = document.querySelector('#nostr-info');
   const nip07Retry = document.querySelector('#nip07-retry');
+  const nip05Form = document.querySelector('#nip05-form');
+  const nip05Address = document.querySelector('#nip05-address');
+  let manualIdentitySelected = false;
   const chatFilter = document.querySelector('#chat-filter');
   const chatSearchStatus = document.querySelector('#chat-search-status');
   const composer = document.querySelector('#chat-composer');
@@ -526,7 +529,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     if (!window.nostr?.signEvent) throw new Error('Your NIP-07 signer cannot create an authorization proof.');
     const endpoint = `${location.origin}/chat/auth/chat/verify`;
     const challenge = await requestJSON('/chat/auth/login/trustroots/challenge');
-    setStatus('Approve the private-key authorization check…');
+    setStatus('Approve the chat sign-in request in your Nostr signer…');
     const event = await window.nostr.signEvent({
       kind: 27235,
       created_at: Math.floor(Date.now() / 1000),
@@ -542,21 +545,29 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     showRoom(session);
   };
 
-  const authorizeResolvedIdentity = async ({ pubkey, nip05 }) => {
-    if (authorizationInFlight) return;
+  const authorizeResolvedIdentity = async ({ pubkey, nip05 }, manual = false) => {
+    if (activeSession) {
+      setHeaderIdentity(`Nostr: ${activeSession.nip05}`, 'connected');
+      return;
+    }
+    if (authorizationInFlight || (manualIdentitySelected && !manual)) return;
     authorizationInFlight = true;
     try {
+      if (manual) {
+        pubkey = String(await window.nostr.getPublicKey()).toLowerCase();
+        nip05 = parseNip05Identifier(nip05).identifier;
+      }
       if (!['trustroots.org', 'hitchwiki.org'].some((domain) => nip05.endsWith(`@${domain}`))) {
         showSignInCard();
         setHeaderIdentity(`Nostr: ${hexToNpub(pubkey).slice(0, 16)}…`, 'unlinked');
-        setStatus('This signer does not have a Trustroots or Hitchwiki NIP-05 identity yet.', 'error');
+        setStatus('We couldn’t discover your identity. Enter your Hitchwiki or Trustroots NIP-05 address below.', 'error');
         return;
       }
       resolvedIdentity = { pubkey, nip05 };
       nip07Retry.hidden = true;
       prepareNip05(nip05);
-      setHeaderIdentity(`Nostr: ${nip05}`, 'connected');
-      setStatus(`Verified ${nip05}. Authorizing chat access…`, 'success');
+      setHeaderIdentity(`Nostr: ${nip05}`, 'pending');
+      setStatus(`Checking ${nip05}. Authorizing chat access…`, 'pending');
       await authorizeAndShowRoom(pubkey);
     } catch (error) {
       showSignInCard();
@@ -569,10 +580,20 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
   };
 
   document.querySelector('[data-close-nostr-dialog]').addEventListener('click', () => nostrDialog.close());
+  nip05Form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (authorizationInFlight) return;
+    manualIdentitySelected = true;
+    if (!window.nostr?.getPublicKey) {
+      setStatus('Unlock or enable your NIP-07 signer, then try again.', 'error');
+      return;
+    }
+    authorizeResolvedIdentity({ nip05: nip05Address.value }, true);
+  });
   window.addEventListener('hitchhiking:nostr-identity', (event) => authorizeResolvedIdentity(event.detail));
   window.addEventListener('hitchhiking:nostr-unavailable', showSignInCard);
   nip07Retry.addEventListener('click', () => {
-    if (resolvedIdentity) authorizeResolvedIdentity(resolvedIdentity);
+    if (resolvedIdentity) authorizeResolvedIdentity(resolvedIdentity, manualIdentitySelected);
   });
   if (window.hitchhikingNostrIdentity) authorizeResolvedIdentity(window.hitchhikingNostrIdentity);
   timelineRetry.addEventListener('click', () => loadTimeline({ room: activeRoom }));
@@ -611,6 +632,7 @@ import { hexToNpub, parseNip05Identifier } from './identity.js';
     try {
       showRoom(await requestJSON('/chat/auth/chat/session'));
     } catch (error) {
+      if (error.status === 401 && !activeSession && !authorizationInFlight) showSignInCard();
       if (error.status !== 401) setStatus(error.message, 'error');
       // The shared identity script used by hitchhiking.org/ dispatches the identity event.
     }
